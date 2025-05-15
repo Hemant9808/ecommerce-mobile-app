@@ -1,0 +1,44 @@
+{
+  "categories": [
+    {
+      "id": "home",
+      "name": "Home",
+      "icon": "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg"
+    },
+    {
+      "id": "kitchen",
+      "name": "Kitchen",
+      "icon": "https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg"
+    },
+    {
+      "id": "watch",
+      "name": "Watch",
+      "icon": "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg"
+    },
+    {
+      "id": "bags",
+      "name": "Bags",
+      "icon": "https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg"
+    },
+    {
+      "id": "fashion",
+      "name": "Fashion",
+      "icon": "https://images.pexels.com/photos/934063/pexels-photo-934063.jpeg"
+    },
+    {
+      "id": "music",
+      "name": "Music",
+      "icon": "https://images.pexels.com/photos/3944093/pexels-photo-3944093.jpeg"
+    },
+    {
+      "id": "travel",
+      "name": "Travel",
+      "icon": "https://images.pexels.com/photos/1051075/pexels-photo-1051075.jpeg"
+    },
+    {
+      "id": "beauty",
+      "name": "Beauty",
+      "icon": "https://images.pexels.com/photos/2113855/pexels-photo-2113855.jpeg"
+    }
+  ]
+}

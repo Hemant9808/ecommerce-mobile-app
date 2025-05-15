@@ -1,0 +1,84 @@
+{
+  "user": {
+    "id": "u1",
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+    "shippingAddresses": [
+      {
+        "id": "addr1",
+        "type": "Home",
+        "street": "123 Main Street",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "country": "United States",
+        "isDefault": true
+      },
+      {
+        "id": "addr2",
+        "type": "Office",
+        "street": "456 Business Ave",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10002",
+        "country": "United States",
+        "isDefault": false
+      }
+    ],
+    "paymentMethods": [
+      {
+        "id": "pm1",
+        "type": "Credit Card",
+        "cardType": "Visa",
+        "lastFourDigits": "4242",
+        "expiryDate": "12/25",
+        "isDefault": true
+      },
+      {
+        "id": "pm2",
+        "type": "Credit Card",
+        "cardType": "Mastercard",
+        "lastFourDigits": "8888",
+        "expiryDate": "09/24",
+        "isDefault": false
+      }
+    ],
+    "orders": [
+      {
+        "id": "o1",
+        "date": "2024-03-15",
+        "status": "Delivered",
+        "total": 1249.98,
+        "items": [
+          {
+            "id": "1",
+            "name": "iPhone X Pro",
+            "quantity": 1,
+            "price": 999.99
+          },
+          {
+            "id": "2",
+            "name": "Wireless Headphones",
+            "quantity": 1,
+            "price": 249.99
+          }
+        ]
+      },
+      {
+        "id": "o2",
+        "date": "2024-03-10",
+        "status": "Processing",
+        "total": 299.97,
+        "items": [
+          {
+            "id": "3",
+            "name": "Smart Watch",
+            "quantity": 1,
+            "price": 299.97
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "cartItems": [
+    {
+      "id": "1",
+      "name": "iPhone X Pro - Latest Model",
+      "price": 999.99,
+      "image": "https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg",
+      "quantity": 1,
+      "color": "Space Gray",
+      "storage": "256GB"
+    },
+    {
+      "id": "2",
+      "name": "Premium Wireless Headphones",
+      "price": 249.99,
+      "image": "https://images.pexels.com/photos/1279107/pexels-photo-1279107.jpeg",
+      "quantity": 2,
+      "color": "Black",
+      "features": ["Noise Cancelling", "40h Battery"]
+    }
+  ]
+}

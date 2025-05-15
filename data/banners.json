@@ -1,0 +1,31 @@
+{
+  "banners": [
+    {
+      "id": "1",
+      "title": "New Arrivals",
+      "subtitle": "BIG SALE",
+      "discount": "70% OFF",
+      "note": "ON ALL MODELS",
+      "ctaText": "BUY NOW",
+      "image": "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg"
+    },
+    {
+      "id": "2",
+      "title": "Summer",
+      "subtitle": "FLASH SALE",
+      "discount": "50% OFF",
+      "note": "LIMITED TIME ONLY",
+      "ctaText": "SHOP NOW",
+      "image": "https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg"
+    },
+    {
+      "id": "3",
+      "title": "Special Offer",
+      "subtitle": "CLEARANCE",
+      "discount": "60% OFF",
+      "note": "WHILE SUPPLIES LAST",
+      "ctaText": "GET DEALS",
+      "image": "https://images.pexels.com/photos/1027130/pexels-photo-1027130.jpeg"
+    }
+  ]
+}

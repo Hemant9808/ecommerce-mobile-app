@@ -1,0 +1,118 @@
+{
+  "featuredProducts": [
+    {
+      "id": "1",
+      "name": "Professional DSLR Camera",
+      "price": 899.99,
+      "image": "https://images.pexels.com/photos/4349785/pexels-photo-4349785.jpeg",
+      "description": "High-quality professional DSLR camera with advanced features",
+      "rating": 4.8,
+      "reviews": 245,
+      "sold": 892,
+      "category": "electronics",
+      "isFavorite": false
+    },
+    {
+      "id": "2",
+      "name": "Vintage Watch Collection",
+      "price": 299.99,
+      "image": "https://images.pexels.com/photos/1927516/pexels-photo-1927516.jpeg",
+      "description": "Classic vintage watch with leather strap",
+      "rating": 4.6,
+      "reviews": 189,
+      "sold": 567,
+      "category": "accessories",
+      "isFavorite": false
+    },
+    {
+      "id": "3",
+      "name": "Premium Headphones",
+      "price": 199.99,
+      "image": "https://images.pexels.com/photos/3965548/pexels-photo-3965548.jpeg",
+      "description": "Wireless noise-canceling headphones",
+      "rating": 4.7,
+      "reviews": 312,
+      "sold": 1023,
+      "category": "electronics",
+      "isFavorite": false
+    },
+    {
+      "id": "4",
+      "name": "iPhone X Pro",
+      "price": 999.99,
+      "image": "https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg",
+      "description": "Latest iPhone model with advanced features",
+      "rating": 4.9,
+      "reviews": 543,
+      "sold": 2341,
+      "category": "electronics",
+      "isFavorite": false
+    }
+  ],
+  "flashSaleProducts": [
+    {
+      "id": "5",
+      "name": "Designer Handbag",
+      "price": 159.99,
+      "image": "https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg",
+      "description": "Luxury designer handbag with genuine leather",
+      "rating": 4.5,
+      "reviews": 167,
+      "sold": 120,
+      "onStock": 150,
+      "category": "fashion",
+      "isFavorite": false
+    },
+    {
+      "id": "6",
+      "name": "Smart Watch Pro",
+      "price": 249.99,
+      "image": "https://images.pexels.com/photos/1279107/pexels-photo-1279107.jpeg",
+      "description": "Advanced smartwatch with health tracking",
+      "rating": 4.7,
+      "reviews": 234,
+      "sold": 98,
+      "onStock": 100,
+      "category": "electronics",
+      "isFavorite": false
+    }
+  ],
+  "wishlistProducts": [
+    {
+      "id": "7",
+      "name": "Wireless Earbuds",
+      "price": 129.99,
+      "image": "https://images.pexels.com/photos/1279107/pexels-photo-1279107.jpeg",
+      "description": "Premium wireless earbuds with charging case",
+      "rating": 4.6,
+      "reviews": 178,
+      "sold": 789,
+      "category": "electronics",
+      "isFavorite": true
+    },
+    {
+      "id": "8",
+      "name": "Classic Sunglasses",
+      "price": 89.99,
+      "image": "https://images.pexels.com/photos/1927516/pexels-photo-1927516.jpeg",
+      "description": "Stylish sunglasses with UV protection",
+      "rating": 4.4,
+      "reviews": 145,
+      "sold": 456,
+      "category": "accessories",
+      "isFavorite": true
+    },
+    {
+      "id": "9",
+      "name": "Premium Camera Lens",
+      "price": 599.99,
+      "image": "https://images.pexels.com/photos/3965548/pexels-photo-3965548.jpeg",
+      "description": "Professional camera lens for DSLR",
+      "rating": 4.8,
+      "reviews": 89,
+      "sold": 234,
+      "category": "electronics",
+      "isFavorite": true
+    }
+  ]
+}
