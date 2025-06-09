@@ -1,10 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { Trash2 } from 'lucide-react-native';
-import { cartItems } from '@/data/cart';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import { Trash2, ShoppingBag } from 'lucide-react-native';
 import CartItem from '@/components/cart/CartItem';
+import { useAppContext } from '@/context/AppContext';
+import { router } from 'expo-router';
 
 export default function CartScreen() {
+  const { cartItems, cartTotal, isSmallDevice, isMediumDevice } = useAppContext();
+
+  const handleCheckout = () => {
+    router.push('/checkout');
+  };
+
+  const handleShopNow = () => {
+    router.push('/(tabs)/products');
+  };
+
+  // Calculate shipping cost
+  const shippingCost = 5.00;
+  const totalAmount = cartTotal + shippingCost;
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,31 +32,41 @@ export default function CartScreen() {
             data={cartItems}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <CartItem item={item} />}
-            contentContainerStyle={styles.cartList}
+            contentContainerStyle={[
+              styles.cartList,
+              isSmallDevice && styles.cartListSmall
+            ]}
           />
 
           <View style={styles.footer}>
             <View style={styles.totalRow}>
               <Text style={styles.totalLabel}>Subtotal</Text>
-              <Text style={styles.totalAmount}>$255.94</Text>
+              <Text style={styles.totalAmount}>${cartTotal.toFixed(2)}</Text>
             </View>
             <View style={styles.totalRow}>
               <Text style={styles.totalLabel}>Shipping</Text>
-              <Text style={styles.totalAmount}>$5.00</Text>
+              <Text style={styles.totalAmount}>${shippingCost.toFixed(2)}</Text>
             </View>
             <View style={[styles.totalRow, styles.finalRow]}>
               <Text style={styles.grandTotalLabel}>Total</Text>
-              <Text style={styles.grandTotalAmount}>$260.94</Text>
+              <Text style={styles.grandTotalAmount}>${totalAmount.toFixed(2)}</Text>
             </View>
-            <TouchableOpacity style={styles.checkoutButton}>
+            <TouchableOpacity
+              style={styles.checkoutButton}
+              onPress={handleCheckout}
+            >
               <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
             </TouchableOpacity>
           </View>
         </>
       ) : (
         <View style={styles.emptyCart}>
+          <ShoppingBag size={64} color="#CCCCCC" style={styles.emptyCartIcon} />
           <Text style={styles.emptyCartText}>Your cart is empty</Text>
-          <TouchableOpacity style={styles.shopNowButton}>
+          <TouchableOpacity
+            style={styles.shopNowButton}
+            onPress={handleShopNow}
+          >
             <Text style={styles.shopNowButtonText}>Shop Now</Text>
           </TouchableOpacity>
         </View>
@@ -49,6 +74,8 @@ export default function CartScreen() {
     </View>
   );
 }
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -68,6 +95,9 @@ const styles = StyleSheet.create({
   },
   cartList: {
     padding: 16,
+  },
+  cartListSmall: {
+    padding: 8,
   },
   footer: {
     backgroundColor: '#FFF',
@@ -113,6 +143,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   checkoutButtonText: {
     fontFamily: 'Inter-SemiBold',
@@ -125,6 +160,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
   },
+  emptyCartIcon: {
+    marginBottom: 16,
+  },
   emptyCartText: {
     fontFamily: 'Inter-Medium',
     fontSize: 16,
@@ -136,6 +174,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 12,
     paddingHorizontal: 24,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   shopNowButtonText: {
     fontFamily: 'Inter-SemiBold',

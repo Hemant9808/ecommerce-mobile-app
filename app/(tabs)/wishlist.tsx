@@ -1,11 +1,13 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput } from 'react-native';
-import { Search } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { Search, Heart } from 'lucide-react-native';
 import ProductGrid from '@/components/products/ProductGrid';
 import SectionHeader from '@/components/common/SectionHeader';
-import { wishlistProducts } from '@/data/products';
+import { useAppContext } from '@/context/AppContext';
 
 export default function WishlistScreen() {
+  const { wishlistItems, searchQuery, setSearchQuery, isSmallDevice } = useAppContext();
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -15,21 +17,34 @@ export default function WishlistScreen() {
             <Search size={20} color="#777" />
             <TextInput
               style={styles.searchInput}
-              placeholder="Search product"
+              placeholder="Search wishlist"
               placeholderTextColor="#777"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
             />
           </View>
         </View>
 
-        {/* Recently Viewed */}
-        <View style={styles.section}>
-          <SectionHeader title="Recently visited" actionLabel="See all" />
-          <ProductGrid products={wishlistProducts} />
-        </View>
+        {wishlistItems.length > 0 ? (
+          <View style={styles.section}>
+            <SectionHeader title="My Wishlist" actionLabel={`${wishlistItems.length} items`} />
+            <ProductGrid products={wishlistItems} />
+          </View>
+        ) : (
+          <View style={styles.emptyWishlist}>
+            <Heart size={64} color="#CCCCCC" style={styles.emptyIcon} />
+            <Text style={styles.emptyText}>Your wishlist is empty</Text>
+            <Text style={styles.emptySubtext}>
+              Items added to your wishlist will appear here
+            </Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
 }
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -57,5 +72,28 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 24,
+  },
+  emptyWishlist: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+    paddingHorizontal: 24,
+  },
+  emptyIcon: {
+    marginBottom: 16,
+  },
+  emptyText: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 18,
+    color: '#333',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptySubtext: {
+    fontFamily: 'Inter-Regular',
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
   },
 });

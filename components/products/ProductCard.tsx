@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Heart } from 'lucide-react-native';
 import { Product } from '@/types/product';
+import { router } from 'expo-router';
+import { useAppContext } from '@/context/AppContext';
 
 interface ProductCardProps {
   product: Product;
@@ -9,15 +11,35 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onPress }: ProductCardProps) {
-  const [isFavorite, setIsFavorite] = useState(product.isFavorite);
+  const { isInWishlist, addToWishlist, removeFromWishlist, isSmallDevice } = useAppContext();
+  const isFavorite = isInWishlist(product.id);
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+  const toggleFavorite = (e: any) => {
+    e.stopPropagation();
+    if (isFavorite) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      router.push(`/product/${product.id}`);
+    }
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <View style={styles.imageContainer}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        isSmallDevice && styles.containerSmall
+      ]}
+      onPress={handlePress}
+    >
+      <View style={[styles.imageContainer, isSmallDevice && styles.imageContainerSmall]}>
         <Image source={{ uri: product.image }} style={styles.image} />
         <TouchableOpacity
           style={styles.favoriteButton}
@@ -31,7 +53,7 @@ export default function ProductCard({ product, onPress }: ProductCardProps) {
         </TouchableOpacity>
       </View>
       <View style={styles.infoContainer}>
-        <Text style={styles.name} numberOfLines={2}>{product.name}</Text>
+        <Text style={[styles.name, isSmallDevice && styles.nameSmall]} numberOfLines={2}>{product.name}</Text>
         <View style={styles.priceContainer}>
           <Text style={styles.price}>$ {product.price.toFixed(2)}</Text>
           <Text style={styles.currency}>USD</Text>
@@ -42,16 +64,31 @@ export default function ProductCard({ product, onPress }: ProductCardProps) {
   );
 }
 
+const { width } = Dimensions.get('window');
+const cardWidth = (width - 48) / 2; // 16px padding on each side, 16px gap between cards
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFF',
     borderRadius: 12,
     overflow: 'hidden',
     marginBottom: 16,
+    width: cardWidth,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  containerSmall: {
+    width: (width - 40) / 2, // Smaller devices need less padding
   },
   imageContainer: {
     position: 'relative',
     height: 150,
+  },
+  imageContainerSmall: {
+    height: 120,
   },
   image: {
     width: '100%',
@@ -67,6 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1,
   },
   infoContainer: {
     padding: 12,
@@ -77,6 +115,10 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 8,
     height: 40,
+  },
+  nameSmall: {
+    fontSize: 12,
+    height: 36,
   },
   priceContainer: {
     flexDirection: 'row',
