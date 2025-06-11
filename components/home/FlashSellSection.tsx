@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
 import { Heart, Plus } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import SectionHeader from '@/components/common/SectionHeader';
+// import SectionHeader from '@/components/common/SectionHeader';
 import { flashSaleProducts } from '@/data/products';
 import { useAppContext } from '@/context/AppContext';
 import { router } from 'expo-router';
@@ -13,7 +13,7 @@ export default function FlashSellSection() {
     minutes: 25,
     seconds: 37
   });
-    const { isSmallDevice, isMediumDevice, isLargeDevice, addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useAppContext();
+  const { isSmallDevice, isMediumDevice, isLargeDevice, addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useAppContext();
 
   const toggleFavorite = (product: any) => {
     if (isInWishlist(product.id)) {
@@ -32,12 +32,10 @@ export default function FlashSellSection() {
     addToCart(product);
   };
 
-  // Live countdown timer
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         let { hours, minutes, seconds } = prev;
-        
         if (seconds > 0) {
           seconds--;
         } else if (minutes > 0) {
@@ -48,15 +46,12 @@ export default function FlashSellSection() {
           minutes = 59;
           seconds = 59;
         }
-        
         return { hours, minutes, seconds };
       });
     }, 1000);
-
     return () => clearInterval(timer);
   }, []);
 
-  // Responsive sizing functions
   const getCardWidth = () => {
     if (isSmallDevice) return 140;
     if (isMediumDevice) return 160;
@@ -83,11 +78,7 @@ export default function FlashSellSection() {
 
   return (
     <View style={styles.container}>
-      <View style={{ paddingHorizontal: padding }}>
-        <SectionHeader title="⚡ Flash Sale" actionLabel="See all" />
-      </View>
-
-      {/* Enhanced Timer Section */}
+      {/* SectionHeader removed for error isolation */}
       <View style={[styles.timerContainer, { paddingHorizontal: padding }]}>
         <LinearGradient
           colors={['#FF6B6B', '#FF8E8E']}
@@ -98,45 +89,25 @@ export default function FlashSellSection() {
           <Text style={[
             styles.timerLabel,
             { fontSize: isSmallDevice ? 14 : isLargeDevice ? 18 : 16 }
-          ]}>
-            🔥 Sale ends in
-          </Text>
+          ]}>🔥 Flash Sale ends in</Text>
           <View style={styles.timerBoxesContainer}>
             <View style={[styles.timerBox, { minWidth: isSmallDevice ? 32 : 40 }]}>
-              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>
-                {formatTime(timeLeft.hours)}
-              </Text>
-              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>
-                HRS
-              </Text>
+              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>{formatTime(timeLeft.hours)}</Text>
+              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>HRS</Text>
             </View>
-            <Text style={[styles.timerSeparator, { fontSize: isSmallDevice ? 16 : 20 }]}>
-              :
-            </Text>
+            <Text style={[styles.timerSeparator, { fontSize: isSmallDevice ? 16 : 20 }]}>:</Text>
             <View style={[styles.timerBox, { minWidth: isSmallDevice ? 32 : 40 }]}>
-              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>
-                {formatTime(timeLeft.minutes)}
-              </Text>
-              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>
-                MIN
-              </Text>
+              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>{formatTime(timeLeft.minutes)}</Text>
+              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>MIN</Text>
             </View>
-            <Text style={[styles.timerSeparator, { fontSize: isSmallDevice ? 16 : 20 }]}>
-              :
-            </Text>
+            <Text style={[styles.timerSeparator, { fontSize: isSmallDevice ? 16 : 20 }]}>:</Text>
             <View style={[styles.timerBox, { minWidth: isSmallDevice ? 32 : 40 }]}>
-              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>
-                {formatTime(timeLeft.seconds)}
-              </Text>
-              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>
-                SEC
-              </Text>
+              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>{formatTime(timeLeft.seconds)}</Text>
+              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>SEC</Text>
             </View>
           </View>
         </LinearGradient>
       </View>
-
-      {/* Enhanced Product Scroll */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -157,13 +128,11 @@ export default function FlashSellSection() {
             onPress={() => handleProductPress(product.id)}
             activeOpacity={0.9}
           >
-            {/* Discount Badge */}
             <View style={styles.discountBadge}>
               <Text style={[styles.discountText, { fontSize: isSmallDevice ? 10 : 12 }]}>
                 -{Math.round((1 - product.price / (product.price * 1.3)) * 100)}%
               </Text>
             </View>
-
             <View style={[
               styles.productImageContainer,
               { height: isSmallDevice ? cardHeight * 0.55 : cardHeight * 0.6 }
@@ -188,7 +157,6 @@ export default function FlashSellSection() {
                 />
               </TouchableOpacity>
             </View>
-
             <View style={[
               styles.productInfo,
               {
@@ -202,7 +170,6 @@ export default function FlashSellSection() {
               ]} numberOfLines={2}>
                 {product.name}
               </Text>
-              
               <View style={styles.priceRow}>
                 <Text style={[
                   styles.productPrice,
@@ -217,7 +184,6 @@ export default function FlashSellSection() {
                   ${(product.price * 1.3).toFixed(2)}
                 </Text>
               </View>
-
               <View style={styles.bottomRow}>
                 <View style={styles.stockInfo}>
                   <Text style={[
@@ -235,7 +201,6 @@ export default function FlashSellSection() {
                     </Text>
                   )}
                 </View>
-                
                 <TouchableOpacity
                   style={[
                     styles.addButton,
