@@ -65,9 +65,9 @@ export default function FlashSellSection() {
   };
 
   const getCardHeight = () => {
-    if (isSmallDevice) return 220;
-    if (isMediumDevice) return 220;
-    return 240;
+    if (isSmallDevice) return 250;
+    if (isMediumDevice) return 240;
+    return 260;
   };
 
   const getPadding = () => {
@@ -167,7 +167,7 @@ export default function FlashSellSection() {
 
             <View style={[
               styles.productImageContainer,
-              { height: cardHeight * 0.6 }
+              { height: isSmallDevice ? cardHeight * 0.55 : cardHeight * 0.6 }
             ]}>
               <Image source={{ uri: product.image }} style={styles.productImage} />
               <TouchableOpacity
@@ -194,7 +194,7 @@ export default function FlashSellSection() {
               styles.productInfo,
               {
                 padding: isSmallDevice ? 8 : 12,
-                height: cardHeight * 0.4,
+                height: isSmallDevice ? cardHeight * 0.45 : cardHeight * 0.4,
               }
             ]}>
               <Text style={[
@@ -382,17 +382,19 @@ const styles = StyleSheet.create({
   },
   productInfo: {
     justifyContent: 'space-between',
+    flex: 1,
   },
   productName: {
     fontFamily: 'Inter-SemiBold',
     color: '#333',
-    marginBottom: 6,
-    lineHeight: 18,
+    marginBottom: 4,
+    lineHeight: 16,
+    flex: 1,
   },
   priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   productPrice: {
     fontFamily: 'Inter-Bold',
@@ -408,6 +410,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: 'auto',
+    paddingTop: 4,
   },
   stockInfo: {
     flexDirection: 'row',
