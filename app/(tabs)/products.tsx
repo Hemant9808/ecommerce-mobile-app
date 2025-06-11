@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Platform, Alert } from 'react-native';
 import { Search, Filter, Grid3x3, LayoutList } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ProductGrid from '@/components/products/ProductGrid';
@@ -11,13 +11,29 @@ export default function ProductsScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('All');
   
   const { isSmallDevice, isMediumDevice, isLargeDevice } = useAppContext();
   const insets = useSafeAreaInsets();
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
-    // Implement search logic here
+  };
+
+  const handleFilterPress = () => {
+    setShowFilters(!showFilters);
+    if (!showFilters) {
+      Alert.alert(
+        'Filters',
+        'Demo filter options:\n• Price Range\n• Category\n• Brand\n• Rating\n• Availability',
+        [{ text: 'OK' }]
+      );
+    }
+  };
+
+  const handleFilterSelect = (filter: string) => {
+    setActiveFilter(filter);
+    Alert.alert('Filter Applied', `Now showing products in: ${filter}`, [{ text: 'OK' }]);
   };
 
   const getPadding = () => {
@@ -159,13 +175,14 @@ export default function ProductsScreen() {
                 key={filter}
                 style={[
                   styles.filterPill,
-                  filter === 'All' && styles.filterPillActive
+                  filter === activeFilter && styles.filterPillActive
                 ]}
+                onPress={() => handleFilterSelect(filter)}
                 activeOpacity={0.8}
               >
                 <Text style={[
                   styles.filterText,
-                  filter === 'All' && styles.filterTextActive,
+                  filter === activeFilter && styles.filterTextActive,
                   { fontSize: isSmallDevice ? 11 : 12 }
                 ]}>
                   {filter}

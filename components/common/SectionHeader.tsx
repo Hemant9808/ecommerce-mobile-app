@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
 import { useAppContext } from '@/context/AppContext';
+import { router } from 'expo-router';
 
 interface SectionHeaderProps {
   title: string;
@@ -11,6 +12,26 @@ interface SectionHeaderProps {
 
 export default function SectionHeader({ title, actionLabel, onActionPress }: SectionHeaderProps) {
   const { isSmallDevice, isMediumDevice, isLargeDevice } = useAppContext();
+
+  const handleActionPress = () => {
+    if (onActionPress) {
+      onActionPress();
+    } else {
+      // Default action - navigate to products or show demo
+      if (title.toLowerCase().includes('categories')) {
+        router.push('/(tabs)/products');
+      } else {
+        Alert.alert(
+          `${title} - See All`,
+          `Demo: Showing all items in ${title} section.\n\nThis would normally navigate to a dedicated page with all ${title.toLowerCase()} items.`,
+          [
+            { text: 'Browse Products', onPress: () => router.push('/(tabs)/products') },
+            { text: 'OK' }
+          ]
+        );
+      }
+    }
+  };
 
   // Responsive sizing
   const getTitleFontSize = () => {
@@ -57,7 +78,7 @@ export default function SectionHeader({ title, actionLabel, onActionPress }: Sec
       {actionLabel && (
         <TouchableOpacity 
           style={styles.actionButton} 
-          onPress={onActionPress}
+          onPress={handleActionPress}
           activeOpacity={0.7}
         >
           <Text style={[
@@ -66,13 +87,11 @@ export default function SectionHeader({ title, actionLabel, onActionPress }: Sec
           ]}>
             {actionLabel}
           </Text>
-          {onActionPress && (
-            <ChevronRight 
-              size={getChevronSize()} 
-              color="#4B7BF5" 
-              style={styles.chevron}
-            />
-          )}
+          <ChevronRight 
+            size={getChevronSize()} 
+            color="#4B7BF5" 
+            style={styles.chevron}
+          />
         </TouchableOpacity>
       )}
     </View>

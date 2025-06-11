@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView, Platform } from 'react-native';
-import { Settings, CreditCard, Package, Heart, LogOut, ChevronRight, User } from 'lucide-react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView, Platform, Alert } from 'react-native';
+import { Settings, CreditCard, Package, Heart, LogOut, ChevronRight, User, Edit } from 'lucide-react-native';
 import { useAppContext } from '@/context/AppContext';
+import { router } from 'expo-router';
 
 export default function ProfileScreen() {
-  const { isSmallDevice, isMediumDevice, isLargeDevice } = useAppContext();
+  const { isSmallDevice, isMediumDevice, isLargeDevice, wishlistItems, cartItems } = useAppContext();
   
   // Responsive icon sizes
   const getIconSize = () => {
@@ -15,32 +16,136 @@ export default function ProfileScreen() {
 
   const iconSize = getIconSize();
 
+  // Handle profile option navigation
+  const handleProfileOptionPress = (option: string) => {
+    switch (option) {
+      case 'My Orders':
+        Alert.alert(
+          'My Orders',
+          'View your order history and track current orders.',
+          [
+            { text: 'View Demo Orders', onPress: () => showDemoOrders() },
+            { text: 'Cancel', style: 'cancel' }
+          ]
+        );
+        break;
+      case 'Payment Methods':
+        Alert.alert(
+          'Payment Methods',
+          'Manage your payment methods and billing information.',
+          [
+            { text: 'Add Payment Method', onPress: () => showPaymentMethods() },
+            { text: 'Cancel', style: 'cancel' }
+          ]
+        );
+        break;
+      case 'My Wishlist':
+        router.push('/(tabs)/wishlist');
+        break;
+      case 'Settings':
+        Alert.alert(
+          'Settings',
+          'Configure your app preferences and account settings.',
+          [
+            { text: 'Open Settings', onPress: () => showSettings() },
+            { text: 'Cancel', style: 'cancel' }
+          ]
+        );
+        break;
+      case 'Logout':
+        Alert.alert(
+          'Logout',
+          'Are you sure you want to logout?',
+          [
+            { text: 'Logout', style: 'destructive', onPress: () => handleLogout() },
+            { text: 'Cancel', style: 'cancel' }
+          ]
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleEditProfile = () => {
+    Alert.alert(
+      'Edit Profile',
+      'Update your profile information and preferences.',
+      [
+        { text: 'Edit Profile', onPress: () => showEditProfile() },
+        { text: 'Cancel', style: 'cancel' }
+      ]
+    );
+  };
+
+  const showDemoOrders = () => {
+    Alert.alert(
+      'Demo Orders',
+      'Order #12345 - Smartphone - Delivered\nOrder #12346 - Headphones - In Transit\nOrder #12347 - T-Shirt - Processing',
+      [{ text: 'OK' }]
+    );
+  };
+
+  const showPaymentMethods = () => {
+    Alert.alert(
+      'Payment Methods',
+      'Demo Payment Methods:\n• Visa ending in 1234\n• PayPal account\n• Apple Pay',
+      [{ text: 'OK' }]
+    );
+  };
+
+  const showSettings = () => {
+    Alert.alert(
+      'Settings',
+      'Demo Settings:\n• Notifications: Enabled\n• Language: English\n• Theme: Auto\n• Privacy Settings',
+      [{ text: 'OK' }]
+    );
+  };
+
+  const showEditProfile = () => {
+    Alert.alert(
+      'Edit Profile',
+      'Demo Profile Editor:\n• Change Photo\n• Update Name\n• Edit Email\n• Change Password',
+      [{ text: 'OK' }]
+    );
+  };
+
+  const handleLogout = () => {
+    Alert.alert('Logged Out', 'You have been successfully logged out.', [{ text: 'OK' }]);
+  };
+
   const profileOptions = [
     { 
       title: 'My Orders',
       icon: <Package size={iconSize} color="#333" />,
-      subtitle: 'Track, return, or buy things again'
+      subtitle: 'Track, return, or buy things again',
+      onPress: () => handleProfileOptionPress('My Orders')
     },
     { 
       title: 'Payment Methods',
       icon: <CreditCard size={iconSize} color="#333" />,
-      subtitle: 'Add or remove payment methods'
+      subtitle: 'Add or remove payment methods',
+      onPress: () => handleProfileOptionPress('Payment Methods')
     },
     { 
       title: 'My Wishlist',
       icon: <Heart size={iconSize} color="#333" />,
-      subtitle: 'Your saved products'
+      subtitle: 'Your saved products',
+      onPress: () => handleProfileOptionPress('My Wishlist'),
+      badge: wishlistItems.length > 0 ? wishlistItems.length.toString() : undefined
     },
     { 
       title: 'Settings',
       icon: <Settings size={iconSize} color="#333" />,
-      subtitle: 'Notifications, password, language'
+      subtitle: 'Notifications, password, language',
+      onPress: () => handleProfileOptionPress('Settings')
     },
     { 
       title: 'Logout',
       icon: <LogOut size={iconSize} color="#EA4335" />,
       subtitle: 'Log out from your account',
-      isDanger: true
+      isDanger: true,
+      onPress: () => handleProfileOptionPress('Logout')
     },
   ];
 
@@ -130,6 +235,7 @@ export default function ProfileScreen() {
                   borderRadius: isSmallDevice ? 6 : 8,
                 }
               ]}
+              onPress={handleEditProfile}
               activeOpacity={0.8}
             >
               <Text style={[
@@ -161,6 +267,7 @@ export default function ProfileScreen() {
                 },
                 index === profileOptions.length - 1 && styles.lastOptionItem
               ]}
+              onPress={option.onPress}
               activeOpacity={0.8}
             >
               <View style={[

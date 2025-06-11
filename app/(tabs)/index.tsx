@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Platform, Alert } from 'react-native';
 import { Search, ShoppingBag, Bell } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BannerCarousel from '@/components/home/BannerCarousel';
@@ -79,7 +79,8 @@ export default function HomeScreen() {
           <View style={styles.actionButtons}>
             <TouchableOpacity
               style={[styles.actionButton, { width: cartButtonSize, height: cartButtonSize }]}
-              onPress={() => router.push('/(tabs)/wishlist')}
+              onPress={() => Alert.alert('Notifications', 'Demo notifications:\n• New offers available\n• Order updates\n• Special deals')}
+              activeOpacity={0.8}
             >
               <Bell size={isSmallDevice ? 18 : isLargeDevice ? 22 : 20} color="#333" />
             </TouchableOpacity>
@@ -87,6 +88,7 @@ export default function HomeScreen() {
             <TouchableOpacity
               style={[styles.actionButton, { width: cartButtonSize, height: cartButtonSize }]}
               onPress={() => router.push('/(tabs)/cart')}
+              activeOpacity={0.8}
             >
               <ShoppingBag size={isSmallDevice ? 18 : isLargeDevice ? 22 : 20} color="#333" />
               {cartItems.length > 0 && (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import { ShoppingBag } from 'lucide-react-native';
 import CartItem from '@/components/cart/CartItem';
 import { useAppContext } from '@/context/AppContext';
@@ -15,7 +15,14 @@ export default function CartScreen() {
   } = useAppContext();
 
   const handleCheckout = () => {
-    router.push('/checkout');
+    Alert.alert(
+      'Checkout Demo',
+      `Proceeding to checkout with ${cartItems.length} items\nTotal: $${(cartTotal + (cartTotal > 50 ? 0 : 5)).toFixed(2)}\n\nDemo checkout flow:\n• Payment method\n• Shipping address\n• Order confirmation`,
+      [
+        { text: 'Continue Shopping', onPress: () => router.push('/(tabs)/products') },
+        { text: 'Proceed', onPress: () => Alert.alert('Order Placed!', 'Your demo order has been placed successfully.') }
+      ]
+    );
   };
 
   const handleShopNow = () => {
