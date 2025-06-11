@@ -57,6 +57,56 @@ export default function BannerCarousel() {
       ctaText: 'GET DEALS',
       image: 'https://images.pexels.com/photos/1027130/pexels-photo-1027130.jpeg',
       colors: ['rgba(128,0,128,0.8)', 'rgba(147,112,219,0.6)', 'transparent']
+    },
+    {
+      id: '4',
+      title: 'Electronics',
+      subtitle: 'MEGA SALE',
+      discount: '80% OFF',
+      note: 'SMARTPHONES & GADGETS',
+      ctaText: 'EXPLORE',
+      image: 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg',
+      colors: ['rgba(30,144,255,0.8)', 'rgba(135,206,250,0.6)', 'transparent']
+    },
+    {
+      id: '5',
+      title: 'Fashion Week',
+      subtitle: 'TRENDY STYLES',
+      discount: '40% OFF',
+      note: 'LATEST FASHION TRENDS',
+      ctaText: 'DISCOVER',
+      image: 'https://images.pexels.com/photos/934063/pexels-photo-934063.jpeg',
+      colors: ['rgba(255,20,147,0.8)', 'rgba(255,182,193,0.6)', 'transparent']
+    },
+    {
+      id: '6',
+      title: 'Home & Living',
+      subtitle: 'COZY DEALS',
+      discount: '55% OFF',
+      note: 'FURNITURE & DECOR',
+      ctaText: 'SHOP HOME',
+      image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg',
+      colors: ['rgba(34,139,34,0.8)', 'rgba(144,238,144,0.6)', 'transparent']
+    },
+    {
+      id: '7',
+      title: 'Sports & Fitness',
+      subtitle: 'ACTIVE LIFE',
+      discount: '45% OFF',
+      note: 'FITNESS EQUIPMENT',
+      ctaText: 'GET FIT',
+      image: 'https://images.pexels.com/photos/3764958/pexels-photo-3764958.jpeg',
+      colors: ['rgba(255,140,0,0.8)', 'rgba(255,218,185,0.6)', 'transparent']
+    },
+    {
+      id: '8',
+      title: 'Beauty & Care',
+      subtitle: 'GLOW UP',
+      discount: '35% OFF',
+      note: 'SKINCARE & MAKEUP',
+      ctaText: 'BEAUTIFY',
+      image: 'https://images.pexels.com/photos/2113855/pexels-photo-2113855.jpeg',
+      colors: ['rgba(186,85,211,0.8)', 'rgba(221,160,221,0.6)', 'transparent']
     }
   ];
 

@@ -39,6 +39,46 @@
       "id": "beauty",
       "name": "Beauty",
       "icon": "https://images.pexels.com/photos/2113855/pexels-photo-2113855.jpeg"
+    },
+    {
+      "id": "electronics",
+      "name": "Electronics",
+      "icon": "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg"
+    },
+    {
+      "id": "sports",
+      "name": "Sports",
+      "icon": "https://images.pexels.com/photos/3764958/pexels-photo-3764958.jpeg"
+    },
+    {
+      "id": "accessories",
+      "name": "Accessories",
+      "icon": "https://images.pexels.com/photos/1927516/pexels-photo-1927516.jpeg"
+    },
+    {
+      "id": "automotive",
+      "name": "Automotive",
+      "icon": "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg"
+    },
+    {
+      "id": "books",
+      "name": "Books",
+      "icon": "https://images.pexels.com/photos/1370295/pexels-photo-1370295.jpeg"
+    },
+    {
+      "id": "toys",
+      "name": "Toys & Games",
+      "icon": "https://images.pexels.com/photos/1002638/pexels-photo-1002638.jpeg"
+    },
+    {
+      "id": "gardening",
+      "name": "Gardening",
+      "icon": "https://images.pexels.com/photos/1002638/pexels-photo-1002638.jpeg"
+    },
+    {
+      "id": "pet",
+      "name": "Pet Supplies",
+      "icon": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg"
     }
   ]
 }

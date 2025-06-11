@@ -64,6 +64,62 @@ export default function CategorySection() {
       color: '#FFEBEE',
       borderColor: '#F44336',
     },
+    {
+      id: 'kitchen',
+      name: 'Kitchen',
+      icon: 'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg',
+      color: '#E0F2F1',
+      borderColor: '#009688',
+    },
+    {
+      id: 'travel',
+      name: 'Travel',
+      icon: 'https://images.pexels.com/photos/1051075/pexels-photo-1051075.jpeg',
+      color: '#FFF8E1',
+      borderColor: '#FFC107',
+    },
+    {
+      id: 'music',
+      name: 'Music',
+      icon: 'https://images.pexels.com/photos/3944093/pexels-photo-3944093.jpeg',
+      color: '#F1F8E9',
+      borderColor: '#8BC34A',
+    },
+    {
+      id: 'accessories',
+      name: 'Accessories',
+      icon: 'https://images.pexels.com/photos/1927516/pexels-photo-1927516.jpeg',
+      color: '#FDE7F3',
+      borderColor: '#EC4899',
+    },
+    {
+      id: 'bags',
+      name: 'Bags',
+      icon: 'https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg',
+      color: '#EDE7F6',
+      borderColor: '#673AB7',
+    },
+    {
+      id: 'watch',
+      name: 'Watches',
+      icon: 'https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg',
+      color: '#E8EAF6',
+      borderColor: '#3F51B5',
+    },
+    {
+      id: 'pet',
+      name: 'Pet Supplies',
+      icon: 'https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg',
+      color: '#FCE4EC',
+      borderColor: '#E91E63',
+    },
+    {
+      id: 'gardening',
+      name: 'Gardening',
+      icon: 'https://images.pexels.com/photos/1002638/pexels-photo-1002638.jpeg',
+      color: '#E8F5E8',
+      borderColor: '#4CAF50',
+    },
   ];
 
   const handleCategoryPress = (categoryId: string) => {
