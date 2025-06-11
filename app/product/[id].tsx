@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { useLocalSearchParams, Stack, router } from 'expo-router';
 import { Heart, Star, ChevronLeft, ShoppingCart, Plus, Minus } from 'lucide-react-native';
 import { useAppContext } from '@/context/AppContext';
@@ -8,19 +8,50 @@ import { StatusBar } from 'expo-status-bar';
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams();
-  const { getProductById, addToCart, isInWishlist, addToWishlist, removeFromWishlist, isSmallDevice, isMediumDevice } = useAppContext();
+  const { 
+    getProductById, 
+    addToCart, 
+    isInWishlist, 
+    addToWishlist, 
+    removeFromWishlist, 
+    isSmallDevice, 
+    isMediumDevice, 
+    isLargeDevice,
+    dimensions 
+  } = useAppContext();
   const [quantity, setQuantity] = useState(1);
   
   const product = getProductById(id as string);
   
   if (!product) {
     return (
-      <View style={styles.notFound}>
-        <Text style={styles.notFoundText}>Product not found</Text>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>Go Back</Text>
+      <SafeAreaView style={styles.notFound}>
+        <Text style={[
+          styles.notFoundText,
+          { fontSize: isSmallDevice ? 16 : isMediumDevice ? 18 : 20 }
+        ]}>
+          Product not found
+        </Text>
+        <TouchableOpacity 
+          style={[
+            styles.backButton,
+            {
+              paddingVertical: isSmallDevice ? 10 : 12,
+              paddingHorizontal: isSmallDevice ? 16 : 20,
+              borderRadius: isSmallDevice ? 8 : 10,
+            }
+          ]} 
+          onPress={() => router.back()}
+          activeOpacity={0.8}
+        >
+          <Text style={[
+            styles.backButtonText,
+            { fontSize: isSmallDevice ? 14 : 16 }
+          ]}>
+            Go Back
+          </Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
   
@@ -45,6 +76,24 @@ export default function ProductDetailScreen() {
       setQuantity(quantity - 1);
     }
   };
+
+  // Responsive styling
+  const getResponsiveStyles = () => {
+    const { width } = dimensions;
+    const imageHeight = isSmallDevice ? width * 0.6 : isMediumDevice ? width * 0.7 : width * 0.8;
+    const padding = isSmallDevice ? 12 : isMediumDevice ? 16 : 20;
+    const headerButtonSize = isSmallDevice ? 36 : isMediumDevice ? 40 : 44;
+    const quantityButtonSize = isSmallDevice ? 32 : isMediumDevice ? 36 : 40;
+    
+    return {
+      imageHeight,
+      padding,
+      headerButtonSize,
+      quantityButtonSize,
+    };
+  };
+
+  const responsiveStyles = getResponsiveStyles();
   
   return (
     <>
@@ -211,8 +260,6 @@ export default function ProductDetailScreen() {
   );
 }
 
-const { width } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -232,11 +279,11 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    height: width * 0.8,
+    height: 300,
     position: 'relative',
   },
   imageContainerSmall: {
-    height: width * 0.6,
+    height: 240,
   },
   image: {
     width: '100%',

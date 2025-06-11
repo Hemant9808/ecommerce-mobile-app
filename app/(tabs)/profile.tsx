@@ -1,73 +1,143 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Settings, CreditCard, Package, Heart, LogOut, ChevronRight } from 'lucide-react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView, Platform } from 'react-native';
+import { Settings, CreditCard, Package, Heart, LogOut, ChevronRight, User } from 'lucide-react-native';
 import { useAppContext } from '@/context/AppContext';
 
 export default function ProfileScreen() {
-  const { isSmallDevice, isMediumDevice } = useAppContext();
+  const { isSmallDevice, isMediumDevice, isLargeDevice } = useAppContext();
+  
+  // Responsive icon sizes
+  const getIconSize = () => {
+    if (isSmallDevice) return 18;
+    if (isMediumDevice) return 20;
+    return 22;
+  };
+
+  const iconSize = getIconSize();
+
   const profileOptions = [
     { 
       title: 'My Orders',
-      icon: <Package size={isSmallDevice ? 18 : 20} color="#333" />,
+      icon: <Package size={iconSize} color="#333" />,
       subtitle: 'Track, return, or buy things again'
     },
     { 
       title: 'Payment Methods',
-      icon: <CreditCard size={isSmallDevice ? 18 : 20} color="#333" />,
+      icon: <CreditCard size={iconSize} color="#333" />,
       subtitle: 'Add or remove payment methods'
     },
     { 
       title: 'My Wishlist',
-      icon: <Heart size={isSmallDevice ? 18 : 20} color="#333" />,
+      icon: <Heart size={iconSize} color="#333" />,
       subtitle: 'Your saved products'
     },
     { 
       title: 'Settings',
-      icon: <Settings size={isSmallDevice ? 18 : 20} color="#333" />,
+      icon: <Settings size={iconSize} color="#333" />,
       subtitle: 'Notifications, password, language'
     },
     { 
       title: 'Logout',
-      icon: <LogOut size={isSmallDevice ? 18 : 20} color="#EA4335" />,
+      icon: <LogOut size={iconSize} color="#EA4335" />,
       subtitle: 'Log out from your account',
       isDanger: true
     },
   ];
 
+  // Responsive styling
+  const getResponsiveStyles = () => {
+    const padding = isSmallDevice ? 12 : isMediumDevice ? 16 : 20;
+    const profileImageSize = isSmallDevice ? 48 : isMediumDevice ? 56 : 64;
+    const optionIconSize = isSmallDevice ? 32 : isMediumDevice ? 36 : 40;
+    
+    return {
+      padding,
+      profileImageSize,
+      optionIconSize,
+    };
+  };
+
+  const responsiveStyles = getResponsiveStyles();
+
   return (
-    <View style={styles.container}>
-      <ScrollView>
+    <SafeAreaView style={styles.container}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      >
         {/* Profile Header */}
         <View style={[
           styles.header,
-          isSmallDevice && styles.headerSmall
+          { 
+            paddingHorizontal: responsiveStyles.padding,
+            paddingVertical: isSmallDevice ? 16 : isMediumDevice ? 20 : 24 
+          }
         ]}>
           <View style={styles.profileSection}>
-            <Image 
-              source={{ uri: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg' }} 
-              style={[
-                styles.profileImage,
-                isSmallDevice && styles.profileImageSmall
-              ]} 
-            />
-            <View style={styles.profileInfo}>
-              <Text style={[
-                styles.profileName,
-                isSmallDevice && styles.profileNameSmall
-              ]}>John Doe</Text>
-              <Text style={[
-                styles.profileEmail,
-                isSmallDevice && styles.profileEmailSmall
-              ]}>johndoe@example.com</Text>
+            <View style={[
+              styles.profileImageContainer,
+              {
+                width: responsiveStyles.profileImageSize,
+                height: responsiveStyles.profileImageSize,
+                borderRadius: responsiveStyles.profileImageSize / 2,
+              }
+            ]}>
+              <Image 
+                source={{ uri: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg' }} 
+                style={[
+                  styles.profileImage,
+                  {
+                    width: responsiveStyles.profileImageSize,
+                    height: responsiveStyles.profileImageSize,
+                    borderRadius: responsiveStyles.profileImageSize / 2,
+                  }
+                ]} 
+              />
             </View>
-            <TouchableOpacity style={[
-              styles.editButton,
-              isSmallDevice && styles.editButtonSmall
+            
+            <View style={[
+              styles.profileInfo,
+              { marginLeft: isSmallDevice ? 12 : 16 }
             ]}>
               <Text style={[
+                styles.profileName,
+                { fontSize: isSmallDevice ? 16 : isMediumDevice ? 18 : 20 }
+              ]}>
+                John Doe
+              </Text>
+              <Text style={[
+                styles.profileEmail,
+                { fontSize: isSmallDevice ? 12 : isMediumDevice ? 13 : 14 }
+              ]}>
+                johndoe@example.com
+              </Text>
+              <View style={styles.membershipBadge}>
+                <Text style={[
+                  styles.membershipText,
+                  { fontSize: isSmallDevice ? 10 : 11 }
+                ]}>
+                  Premium Member
+                </Text>
+              </View>
+            </View>
+            
+            <TouchableOpacity 
+              style={[
+                styles.editButton,
+                {
+                  paddingVertical: isSmallDevice ? 6 : 8,
+                  paddingHorizontal: isSmallDevice ? 10 : 12,
+                  borderRadius: isSmallDevice ? 6 : 8,
+                }
+              ]}
+              activeOpacity={0.8}
+            >
+              <Text style={[
                 styles.editButtonText,
-                isSmallDevice && styles.editButtonTextSmall
-              ]}>Edit</Text>
+                { fontSize: isSmallDevice ? 12 : 13 }
+              ]}>
+                Edit
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -75,51 +145,149 @@ export default function ProfileScreen() {
         {/* Profile Options */}
         <View style={[
           styles.optionsContainer,
-          isSmallDevice && styles.optionsContainerSmall
+          { 
+            marginHorizontal: responsiveStyles.padding,
+            borderRadius: isSmallDevice ? 8 : 12 
+          }
         ]}>
           {profileOptions.map((option, index) => (
             <TouchableOpacity 
               key={index} 
               style={[
                 styles.optionItem,
-                isSmallDevice && styles.optionItemSmall,
+                {
+                  paddingVertical: isSmallDevice ? 12 : isMediumDevice ? 14 : 16,
+                  paddingHorizontal: responsiveStyles.padding,
+                },
                 index === profileOptions.length - 1 && styles.lastOptionItem
               ]}
+              activeOpacity={0.8}
             >
               <View style={[
                 styles.optionIconContainer,
-                isSmallDevice && styles.optionIconContainerSmall
-              ]}>{option.icon}</View>
+                {
+                  width: responsiveStyles.optionIconSize,
+                  height: responsiveStyles.optionIconSize,
+                  borderRadius: responsiveStyles.optionIconSize / 2,
+                  marginRight: isSmallDevice ? 10 : 12,
+                }
+              ]}>
+                {option.icon}
+              </View>
+              
               <View style={styles.optionContent}>
                 <Text style={[
                   styles.optionTitle, 
-                  isSmallDevice && styles.optionTitleSmall,
+                  { 
+                    fontSize: isSmallDevice ? 14 : isMediumDevice ? 15 : 16,
+                    marginBottom: isSmallDevice ? 2 : 4,
+                  },
                   option.isDanger && styles.dangerText
                 ]}>
                   {option.title}
                 </Text>
                 <Text style={[
                   styles.optionSubtitle,
-                  isSmallDevice && styles.optionSubtitleSmall
-                ]}>{option.subtitle}</Text>
+                  { 
+                    fontSize: isSmallDevice ? 11 : isMediumDevice ? 12 : 13,
+                    lineHeight: isSmallDevice ? 14 : 16,
+                  }
+                ]}>
+                  {option.subtitle}
+                </Text>
               </View>
-              {!option.isDanger && <ChevronRight size={isSmallDevice ? 18 : 20} color="#999" />}
+              
+              {!option.isDanger && (
+                <ChevronRight 
+                  size={isSmallDevice ? 16 : 18} 
+                  color="#999" 
+                />
+              )}
             </TouchableOpacity>
           ))}
+        </View>
+
+        {/* Stats Section */}
+        <View style={[
+          styles.statsContainer,
+          { 
+            marginHorizontal: responsiveStyles.padding,
+            borderRadius: isSmallDevice ? 8 : 12,
+            paddingVertical: isSmallDevice ? 16 : 20,
+          }
+        ]}>
+          <Text style={[
+            styles.statsTitle,
+            { 
+              fontSize: isSmallDevice ? 15 : isMediumDevice ? 16 : 18,
+              marginBottom: isSmallDevice ? 12 : 16,
+            }
+          ]}>
+            Your Activity
+          </Text>
+          
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <Text style={[
+                styles.statNumber,
+                { fontSize: isSmallDevice ? 18 : isMediumDevice ? 20 : 22 }
+              ]}>
+                12
+              </Text>
+              <Text style={[
+                styles.statLabel,
+                { fontSize: isSmallDevice ? 11 : 12 }
+              ]}>
+                Orders
+              </Text>
+            </View>
+            
+            <View style={styles.statItem}>
+              <Text style={[
+                styles.statNumber,
+                { fontSize: isSmallDevice ? 18 : isMediumDevice ? 20 : 22 }
+              ]}>
+                8
+              </Text>
+              <Text style={[
+                styles.statLabel,
+                { fontSize: isSmallDevice ? 11 : 12 }
+              ]}>
+                Wishlist
+              </Text>
+            </View>
+            
+            <View style={styles.statItem}>
+              <Text style={[
+                styles.statNumber,
+                { fontSize: isSmallDevice ? 18 : isMediumDevice ? 20 : 22 }
+              ]}>
+                24
+              </Text>
+              <Text style={[
+                styles.statLabel,
+                { fontSize: isSmallDevice ? 11 : 12 }
+              ]}>
+                Reviews
+              </Text>
+            </View>
+          </View>
         </View>
 
         {/* App Version */}
         <View style={[
           styles.versionContainer,
-          isSmallDevice && styles.versionContainerSmall
+          { paddingVertical: isSmallDevice ? 16 : 20 }
         ]}>
           <Text style={[
             styles.versionText,
-            isSmallDevice && styles.versionTextSmall
-          ]}>App Version 1.0.0</Text>
+            { fontSize: isSmallDevice ? 12 : 13 }
+          ]}>
+            App Version 1.0.0
+          </Text>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -130,139 +298,164 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FFF',
-    paddingHorizontal: 16,
-    paddingVertical: 24,
     marginBottom: 16,
-  },
-  headerSmall: {
-    paddingVertical: 16,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
   profileSection: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  profileImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+  profileImageContainer: {
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
-  profileImageSmall: {
-    width: 48,
-    height: 48,
+  profileImage: {
+    resizeMode: 'cover',
   },
   profileInfo: {
     flex: 1,
-    marginLeft: 16,
   },
   profileName: {
     fontFamily: 'Inter-SemiBold',
-    fontSize: 18,
     color: '#333',
     marginBottom: 4,
   },
-  profileNameSmall: {
-    fontSize: 16,
-  },
   profileEmail: {
     fontFamily: 'Inter-Regular',
-    fontSize: 14,
     color: '#666',
+    marginBottom: 6,
   },
-  profileEmailSmall: {
-    fontSize: 12,
+  membershipBadge: {
+    backgroundColor: '#4B7BF5',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+  },
+  membershipText: {
+    fontFamily: 'Inter-Medium',
+    color: '#FFF',
   },
   editButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
     borderWidth: 1,
     borderColor: '#4B7BF5',
-  },
-  editButtonSmall: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 32,
   },
   editButtonText: {
     fontFamily: 'Inter-Medium',
-    fontSize: 14,
     color: '#4B7BF5',
-  },
-  editButtonTextSmall: {
-    fontSize: 12,
   },
   optionsContainer: {
     backgroundColor: '#FFF',
-    borderRadius: 12,
-    marginHorizontal: 16,
     marginBottom: 16,
     overflow: 'hidden',
-  },
-  optionsContainerSmall: {
-    borderRadius: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
   optionItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
-  optionItemSmall: {
-    paddingVertical: 12,
+    borderBottomColor: '#F0F0F2',
+    minHeight: 56,
   },
   lastOptionItem: {
     borderBottomWidth: 0,
   },
   optionIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
     backgroundColor: '#F5F5F7',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
-  },
-  optionIconContainerSmall: {
-    width: 32,
-    height: 32,
   },
   optionContent: {
     flex: 1,
   },
   optionTitle: {
     fontFamily: 'Inter-Medium',
-    fontSize: 16,
     color: '#333',
-    marginBottom: 2,
-  },
-  optionTitleSmall: {
-    fontSize: 14,
   },
   optionSubtitle: {
     fontFamily: 'Inter-Regular',
-    fontSize: 13,
     color: '#666',
-  },
-  optionSubtitleSmall: {
-    fontSize: 12,
   },
   dangerText: {
     color: '#EA4335',
   },
+  statsContainer: {
+    backgroundColor: '#FFF',
+    marginBottom: 16,
+    paddingHorizontal: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  statsTitle: {
+    fontFamily: 'Inter-SemiBold',
+    color: '#333',
+    textAlign: 'center',
+  },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statNumber: {
+    fontFamily: 'Inter-Bold',
+    color: '#4B7BF5',
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontFamily: 'Inter-Regular',
+    color: '#666',
+    textAlign: 'center',
+  },
   versionContainer: {
     alignItems: 'center',
-    paddingVertical: 20,
-  },
-  versionContainerSmall: {
-    paddingVertical: 16,
   },
   versionText: {
     fontFamily: 'Inter-Regular',
-    fontSize: 14,
     color: '#999',
-  },
-  versionTextSmall: {
-    fontSize: 12,
   },
 });

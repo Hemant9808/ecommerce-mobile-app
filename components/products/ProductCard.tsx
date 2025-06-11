@@ -57,11 +57,11 @@ export default function ProductCard({
   const getCardWidth = () => {
     if (viewMode === 'list') return '100%';
     
-    const padding = isSmallDevice ? 24 : isLargeDevice ? 40 : 32;
-    const gap = isSmallDevice ? 8 : 12;
+    const horizontalPadding = isSmallDevice ? 24 : isLargeDevice ? 40 : 32;
+    const gap = isSmallDevice ? 8 : isMediumDevice ? 12 : 16;
     const numColumns = isSmallDevice ? 2 : isMediumDevice ? 2 : 3;
     
-    return (dimensions.width - padding - (gap * (numColumns - 1))) / numColumns;
+    return (dimensions.width - horizontalPadding - (gap * (numColumns - 1))) / numColumns;
   };
 
   const getImageHeight = () => {
