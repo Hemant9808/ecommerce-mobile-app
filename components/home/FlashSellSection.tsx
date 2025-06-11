@@ -14,14 +14,15 @@ export default function FlashSellSection() {
     minutes: 25,
     seconds: 37
   });
-  
-  const { isSmallDevice, isMediumDevice, isLargeDevice, addToCart } = useAppContext();
+    const { isSmallDevice, isMediumDevice, isLargeDevice, addToCart, addToWishlist, isInWishlist } = useAppContext();
 
-  const toggleFavorite = (productId: string) => {
-    if (favorites.includes(productId)) {
-      setFavorites(favorites.filter(id => id !== productId));
+  const toggleFavorite = (product: any) => {
+    if (isInWishlist(product.id)) {
+      // Remove from wishlist logic would go here
+      setFavorites(favorites.filter(id => id !== product.id));
     } else {
-      setFavorites([...favorites, productId]);
+      addToWishlist(product);
+      setFavorites([...favorites, product.id]);
     }
   };
 

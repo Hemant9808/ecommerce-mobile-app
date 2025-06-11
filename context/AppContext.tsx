@@ -11,6 +11,7 @@ interface AppContextType {
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateCartItemQuantity: (productId: string, quantity: number) => void;
+  clearCart: () => void;
   cartTotal: number;
   
   // Wishlist
@@ -86,6 +87,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     
     if (existingItem) {
       updateCartItemQuantity(product.id, existingItem.quantity + quantity);
+      Alert.alert('Success', `Updated ${product.name} quantity in cart (${existingItem.quantity + quantity} total)`);
     } else {
       const newItem: CartItem = {
         id: product.id,
@@ -96,13 +98,21 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       };
       
       setCartItems([...cartItems, newItem]);
-      Alert.alert('Success', 'Product added to cart');
+      Alert.alert('Added to Cart!', `${product.name} has been added to your cart.`, [
+        { text: 'Continue Shopping', style: 'cancel' },
+        { text: 'View Cart', onPress: () => {} }
+      ]);
     }
   };
 
   // Remove item from cart
   const removeFromCart = (productId: string) => {
     setCartItems(cartItems.filter(item => item.id !== productId));
+  };
+
+  // Clear entire cart
+  const clearCart = () => {
+    setCartItems([]);
   };
 
   // Update cart item quantity
@@ -123,7 +133,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const addToWishlist = (product: Product) => {
     if (!isInWishlist(product.id)) {
       setWishlistItems([...wishlistItems, { ...product, isFavorite: true }]);
-      Alert.alert('Success', 'Product added to wishlist');
+      Alert.alert('Added to Wishlist!', `${product.name} has been saved to your wishlist.`, [
+        { text: 'Continue', style: 'cancel' },
+        { text: 'View Wishlist', onPress: () => {} }
+      ]);
     }
   };
 
@@ -162,6 +175,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     addToCart,
     removeFromCart,
     updateCartItemQuantity,
+    clearCart,
     cartTotal,
     wishlistItems,
     addToWishlist,

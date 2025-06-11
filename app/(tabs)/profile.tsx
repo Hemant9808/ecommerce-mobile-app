@@ -77,41 +77,75 @@ export default function ProfileScreen() {
       ]
     );
   };
-
   const showDemoOrders = () => {
     Alert.alert(
-      'Demo Orders',
-      'Order #12345 - Smartphone - Delivered\nOrder #12346 - Headphones - In Transit\nOrder #12347 - T-Shirt - Processing',
-      [{ text: 'OK' }]
+      'My Orders',
+      'Demo Order History:\n\n📦 Order #12345\n• iPhone 15 Pro - $999.99\n• Status: Delivered\n• Date: Dec 5, 2024\n\n📦 Order #12346\n• Wireless Headphones - $249.99\n• Status: In Transit\n• Date: Dec 8, 2024\n\n📦 Order #12347\n• Premium T-Shirt - $29.99\n• Status: Processing\n• Date: Dec 10, 2024',
+      [
+        { text: 'Track Orders', onPress: () => Alert.alert('Order Tracking', 'Demo: Track your orders in real-time with push notifications and detailed status updates.') },
+        { text: 'OK' }
+      ]
     );
   };
 
   const showPaymentMethods = () => {
     Alert.alert(
       'Payment Methods',
-      'Demo Payment Methods:\n• Visa ending in 1234\n• PayPal account\n• Apple Pay',
-      [{ text: 'OK' }]
+      'Demo Payment Methods:\n\n💳 Visa ending in 1234\n• Expires: 12/27\n• Primary method\n\n💳 Mastercard ending in 5678\n• Expires: 08/26\n\n📱 PayPal Account\n• john.doe@email.com\n\n🍎 Apple Pay\n• Touch/Face ID enabled',
+      [
+        { text: 'Add New Card', onPress: () => Alert.alert('Add Payment Method', 'Demo: Add a new credit card, debit card, or link your PayPal account.') },
+        { text: 'Manage', onPress: () => Alert.alert('Manage Cards', 'Demo: Edit, remove, or set default payment methods.') },
+        { text: 'OK' }
+      ]
     );
   };
 
   const showSettings = () => {
     Alert.alert(
       'Settings',
-      'Demo Settings:\n• Notifications: Enabled\n• Language: English\n• Theme: Auto\n• Privacy Settings',
-      [{ text: 'OK' }]
+      'Demo App Settings:\n\n🔔 Notifications\n• Push notifications: ON\n• Email updates: ON\n• SMS alerts: OFF\n\n🌍 Language & Region\n• Language: English\n• Currency: USD\n• Time zone: EST\n\n🎨 Appearance\n• Theme: Auto (System)\n• Dark mode: Auto\n\n🔒 Privacy & Security\n• Two-factor auth: ON\n• Biometric login: ON',
+      [
+        { text: 'Notification Settings', onPress: () => Alert.alert('Notifications', 'Demo: Configure push notifications, email alerts, and SMS preferences.') },
+        { text: 'Privacy Settings', onPress: () => Alert.alert('Privacy', 'Demo: Manage data sharing, cookies, and account privacy settings.') },
+        { text: 'OK' }
+      ]
     );
   };
-
   const showEditProfile = () => {
     Alert.alert(
       'Edit Profile',
-      'Demo Profile Editor:\n• Change Photo\n• Update Name\n• Edit Email\n• Change Password',
-      [{ text: 'OK' }]
+      'Demo Profile Editor:\n\n👤 Personal Information\n• Full Name: John Doe\n• Email: john.doe@email.com\n• Phone: +1 (555) 123-4567\n• Birthday: January 15, 1990\n\n📍 Address Information\n• Home: 123 Main St, NYC\n• Work: 456 Business Ave, NYC\n\n🔒 Account Security\n• Password: ••••••••\n• Two-factor auth: Enabled',
+      [
+        { text: 'Change Photo', onPress: () => Alert.alert('Change Photo', 'Demo: Upload a new profile picture from camera or gallery.') },
+        { text: 'Update Info', onPress: () => Alert.alert('Update Profile', 'Demo: Modify your personal information and contact details.') },
+        { text: 'Security', onPress: () => Alert.alert('Security Settings', 'Demo: Change password, manage two-factor authentication, and review login activity.') },
+        { text: 'Cancel', style: 'cancel' }
+      ]
     );
   };
 
   const handleLogout = () => {
-    Alert.alert('Logged Out', 'You have been successfully logged out.', [{ text: 'OK' }]);
+    Alert.alert(
+      'Confirm Logout',
+      'Are you sure you want to log out? You will need to sign in again to access your account.',
+      [
+        { 
+          text: 'Cancel', 
+          style: 'cancel' 
+        },
+        { 
+          text: 'Logout', 
+          style: 'destructive', 
+          onPress: () => {
+            Alert.alert(
+              'Logged Out Successfully',
+              'You have been securely logged out. Thank you for using our app!',
+              [{ text: 'OK' }]
+            );
+          }
+        }
+      ]
+    );
   };
 
   const profileOptions = [

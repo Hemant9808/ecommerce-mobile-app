@@ -17,16 +17,29 @@ export default function SectionHeader({ title, actionLabel, onActionPress }: Sec
     if (onActionPress) {
       onActionPress();
     } else {
-      // Default action - navigate to products or show demo
-      if (title.toLowerCase().includes('categories')) {
+      // Enhanced navigation based on section type
+      if (title.toLowerCase().includes('categories') || title.toLowerCase().includes('popular categories')) {
         router.push('/(tabs)/products');
+      } else if (title.toLowerCase().includes('flash') || title.toLowerCase().includes('sale')) {
+        router.push({
+          pathname: '/(tabs)/products',
+          params: { filter: 'flash-sale' }
+        });
+      } else if (title.toLowerCase().includes('featured')) {
+        router.push({
+          pathname: '/(tabs)/products',
+          params: { filter: 'featured' }
+        });
+      } else if (title.toLowerCase().includes('wishlist')) {
+        router.push('/(tabs)/wishlist');
       } else {
         Alert.alert(
           `${title} - See All`,
-          `Demo: Showing all items in ${title} section.\n\nThis would normally navigate to a dedicated page with all ${title.toLowerCase()} items.`,
+          `Explore more items in the ${title} section:\n\n📱 Browse full collection\n🔍 Filter by preferences\n⭐ View ratings & reviews\n💝 Add to wishlist\n🛒 Quick add to cart`,
           [
-            { text: 'Browse Products', onPress: () => router.push('/(tabs)/products') },
-            { text: 'OK' }
+            { text: 'Browse All', onPress: () => router.push('/(tabs)/products') },
+            { text: 'Filter Options', onPress: () => Alert.alert('Filters', 'Demo: Apply filters like price range, brand, rating, and availability.') },
+            { text: 'Cancel', style: 'cancel' }
           ]
         );
       }

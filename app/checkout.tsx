@@ -8,7 +8,7 @@ type PaymentMethod = 'credit_card' | 'paypal' | 'apple_pay';
 type DeliveryMethod = 'standard' | 'express' | 'same_day';
 
 export default function CheckoutScreen() {
-  const { cartItems, cartTotal, isSmallDevice, isMediumDevice } = useAppContext();
+  const { cartItems, cartTotal, clearCart, isSmallDevice, isMediumDevice } = useAppContext();
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('credit_card');
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('standard');
   const [address, setAddress] = useState({
@@ -24,13 +24,32 @@ export default function CheckoutScreen() {
   const totalAmount = cartTotal + deliveryFee;
   
   const handlePlaceOrder = () => {
+    // Simulate order processing
     Alert.alert(
-      'Order Placed',
-      'Your order has been placed successfully!',
+      'Order Placed Successfully!',
+      `Thank you for your order!\n\nOrder Details:\n• ${cartItems.length} item${cartItems.length !== 1 ? 's' : ''}\n• Total: $${totalAmount.toFixed(2)}\n• Payment: ${paymentMethod.replace('_', ' ').toUpperCase()}\n• Delivery: ${deliveryMethod.replace('_', ' ')} delivery\n\nYour order will be processed and shipped to:\n${address.fullName}\n${address.street}\n${address.city}, ${address.state} ${address.zipCode}`,
       [
         {
-          text: 'OK',
-          onPress: () => router.replace('/(tabs)'),
+          text: 'Continue Shopping',
+          onPress: () => {
+            // Clear cart and navigate to home
+            clearCart();
+            router.replace('/(tabs)');
+          },
+        },
+        {
+          text: 'View Order',
+          onPress: () => {
+            // Show order confirmation
+            Alert.alert(
+              'Order Confirmation',
+              'Your order has been confirmed and will be tracked via email notifications.',
+              [{ text: 'OK', onPress: () => {
+                clearCart();
+                router.replace('/(tabs)');
+              }}]
+            );
+          },
         },
       ]
     );

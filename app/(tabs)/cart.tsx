@@ -15,14 +15,13 @@ export default function CartScreen() {
   } = useAppContext();
 
   const handleCheckout = () => {
-    Alert.alert(
-      'Checkout Demo',
-      `Proceeding to checkout with ${cartItems.length} items\nTotal: $${(cartTotal + (cartTotal > 50 ? 0 : 5)).toFixed(2)}\n\nDemo checkout flow:\n• Payment method\n• Shipping address\n• Order confirmation`,
-      [
-        { text: 'Continue Shopping', onPress: () => router.push('/(tabs)/products') },
-        { text: 'Proceed', onPress: () => Alert.alert('Order Placed!', 'Your demo order has been placed successfully.') }
-      ]
-    );
+    if (cartItems.length === 0) {
+      Alert.alert('Empty Cart', 'Please add items to your cart before proceeding to checkout.');
+      return;
+    }
+    
+    // Navigate to checkout screen
+    router.push('/checkout');
   };
 
   const handleShopNow = () => {

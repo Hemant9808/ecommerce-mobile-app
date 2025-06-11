@@ -116,8 +116,22 @@ export default function BannerCarousel() {
     setActiveIndex(Math.max(0, Math.min(currentIndex, banners.length - 1)));
   };
 
-  const handleBannerPress = (bannerId: string) => {
-    router.push('/(tabs)/products');
+  const handleBannerPress = (banner: any) => {
+    // Navigate based on banner type
+    const category = banner.title.toLowerCase().includes('electronics') ? 'electronics' :
+                    banner.title.toLowerCase().includes('fashion') ? 'fashion' :
+                    banner.title.toLowerCase().includes('home') ? 'home' :
+                    banner.title.toLowerCase().includes('sports') ? 'sports' :
+                    banner.title.toLowerCase().includes('beauty') ? 'beauty' : null;
+    
+    if (category) {
+      router.push({
+        pathname: '/(tabs)/products',
+        params: { category: category }
+      });
+    } else {
+      router.push('/(tabs)/products');
+    }
   };
 
   // Auto scroll functionality
@@ -165,7 +179,7 @@ export default function BannerCarousel() {
                 marginRight: index < banners.length - 1 ? 16 : 0,
               }
             ]}
-            onPress={() => handleBannerPress(banner.id)}
+            onPress={() => handleBannerPress(banner)}
             activeOpacity={0.95}
           >
             <Image 
@@ -216,7 +230,7 @@ export default function BannerCarousel() {
                     borderRadius: isSmallDevice ? 20 : 24,
                   }
                 ]}
-                onPress={() => handleBannerPress(banner.id)}
+                onPress={() => handleBannerPress(banner)}
               >
                 <Text style={[
                   styles.ctaButtonText,

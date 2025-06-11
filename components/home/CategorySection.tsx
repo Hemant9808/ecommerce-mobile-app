@@ -123,7 +123,11 @@ export default function CategorySection() {
   ];
 
   const handleCategoryPress = (categoryId: string) => {
-    router.push('/(tabs)/products');
+    // Set search query to filter by category and navigate to products
+    router.push({
+      pathname: '/(tabs)/products',
+      params: { category: categoryId }
+    });
   };
 
   const getIconSize = () => {

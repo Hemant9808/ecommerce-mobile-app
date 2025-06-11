@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView, Platform, Alert } from 'react-native';
 import { useLocalSearchParams, Stack, router } from 'expo-router';
 import { Heart, Star, ChevronLeft, ShoppingCart, Plus, Minus } from 'lucide-react-native';
 import { useAppContext } from '@/context/AppContext';
@@ -67,6 +67,19 @@ export default function ProductDetailScreen() {
   
   const handleAddToCart = () => {
     addToCart(product, quantity);
+    Alert.alert(
+      'Added to Cart!',
+      `${quantity} x ${product.name} added to cart\nTotal: $${(product.price * quantity).toFixed(2)}`,
+      [
+        { text: 'Continue Shopping', style: 'cancel' },
+        { text: 'View Cart', onPress: () => router.push('/(tabs)/cart') }
+      ]
+    );
+  };
+
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    router.push('/checkout');
   };
   
   const increaseQuantity = () => setQuantity(quantity + 1);
@@ -241,19 +254,35 @@ export default function ProductDetailScreen() {
               ${(product.price * quantity).toFixed(2)}
             </Text>
           </View>
-          <TouchableOpacity 
-            style={[
-              styles.addToCartButton,
-              isSmallDevice && styles.addToCartButtonSmall
-            ]}
-            onPress={handleAddToCart}
-          >
-            <ShoppingCart size={isSmallDevice ? 18 : 20} color="#FFF" />
-            <Text style={[
-              styles.addToCartText,
-              isSmallDevice && styles.addToCartTextSmall
-            ]}>Add to Cart</Text>
-          </TouchableOpacity>
+          
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity 
+              style={[
+                styles.addToCartButton,
+                isSmallDevice && styles.addToCartButtonSmall
+              ]}
+              onPress={handleAddToCart}
+            >
+              <ShoppingCart size={isSmallDevice ? 16 : 18} color="#FFF" />
+              <Text style={[
+                styles.addToCartText,
+                isSmallDevice && styles.addToCartTextSmall
+              ]}>Add to Cart</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[
+                styles.buyNowButton,
+                isSmallDevice && styles.buyNowButtonSmall
+              ]}
+              onPress={handleBuyNow}
+            >
+              <Text style={[
+                styles.buyNowText,
+                isSmallDevice && styles.buyNowTextSmall
+              ]}>Buy Now</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </>
@@ -460,6 +489,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 16,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 8,
+  },
   totalLabel: {
     fontFamily: 'Inter-Regular',
     fontSize: 12,
@@ -481,9 +514,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#4B7BF5',
     borderRadius: 12,
     paddingVertical: 12,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
   addToCartButtonSmall: {
     paddingVertical: 10,
@@ -497,6 +531,27 @@ const styles = StyleSheet.create({
   },
   addToCartTextSmall: {
     fontSize: 14,
+  },
+  buyNowButton: {
+    backgroundColor: '#FF6B6B',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  buyNowButtonSmall: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  buyNowText: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 14,
+    color: '#FFF',
+  },
+  buyNowTextSmall: {
+    fontSize: 12,
   },
   backButtonText: {
     fontFamily: 'Inter-Medium',

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Platform, Alert } from 'react-native';
 import { Search, Filter, Grid3x3, LayoutList } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useLocalSearchParams } from 'expo-router';
 import ProductGrid from '@/components/products/ProductGrid';
 import SectionHeader from '@/components/common/SectionHeader';
 import { featuredProducts } from '@/data/products';
@@ -15,6 +16,36 @@ export default function ProductsScreen() {
   
   const { isSmallDevice, isMediumDevice, isLargeDevice } = useAppContext();
   const insets = useSafeAreaInsets();
+  const { category, search, filter } = useLocalSearchParams();
+
+  // Set active filter based on category parameter
+  useEffect(() => {
+    if (category && typeof category === 'string') {
+      const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+      setActiveFilter(categoryName);
+      setShowFilters(true);
+    }
+  }, [category]);
+
+  // Set search query from params
+  useEffect(() => {
+    if (search && typeof search === 'string') {
+      setSearchQuery(search);
+    }
+  }, [search]);
+
+  // Set filter from params
+  useEffect(() => {
+    if (filter && typeof filter === 'string') {
+      if (filter === 'flash-sale') {
+        setActiveFilter('Electronics'); // Flash sale items are mostly electronics
+        setShowFilters(true);
+      } else if (filter === 'featured') {
+        setActiveFilter('All');
+        setShowFilters(false);
+      }
+    }
+  }, [filter]);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -33,7 +64,14 @@ export default function ProductsScreen() {
 
   const handleFilterSelect = (filter: string) => {
     setActiveFilter(filter);
+    setSearchQuery(''); // Clear search when selecting filter
     Alert.alert('Filter Applied', `Now showing products in: ${filter}`, [{ text: 'OK' }]);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setActiveFilter('All');
+    setShowFilters(false);
   };
 
   const getPadding = () => {
@@ -46,9 +84,15 @@ export default function ProductsScreen() {
 
   const filteredProducts = searchQuery
     ? featuredProducts.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.category?.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : featuredProducts;
+    : activeFilter === 'All' 
+      ? featuredProducts 
+      : featuredProducts.filter(product => 
+          product.category?.toLowerCase() === activeFilter.toLowerCase()
+        );
 
   return (
     <View style={styles.container}>
@@ -195,22 +239,51 @@ export default function ProductsScreen() {
         {/* Enhanced Sections */}
         <View style={[styles.section, { paddingHorizontal: padding }]}>
           <SectionHeader
-            title={searchQuery ? 'Search Results' : 'Featured Products'}
-            actionLabel="See all"
+            title={searchQuery ? `Search Results (${filteredProducts.length})` : activeFilter !== 'All' ? `${activeFilter} Products` : 'Featured Products'}
+            actionLabel={filteredProducts.length > 8 ? "See all" : undefined}
+            onActionPress={() => {
+              if (filteredProducts.length > 8) {
+                Alert.alert(
+                  'All Products',
+                  `Showing all ${filteredProducts.length} products in this section.`,
+                  [{ text: 'OK' }]
+                );
+              }
+            }}
           />
           <ProductGrid products={filteredProducts} viewMode={viewMode} />
         </View>
 
-        {!searchQuery && (
+        {!searchQuery && activeFilter === 'All' && (
           <>
             <View style={[styles.section, { paddingHorizontal: padding }]}>
-              <SectionHeader title="Recently Viewed" actionLabel="See all" />
+              <SectionHeader 
+                title="Recently Viewed" 
+                actionLabel="Clear history"
+                onActionPress={() => Alert.alert('History Cleared', 'Your recently viewed items have been cleared.')}
+              />
               <ProductGrid products={featuredProducts.slice(0, 4)} viewMode={viewMode} />
             </View>
 
             <View style={[styles.section, { paddingHorizontal: padding }]}>
-              <SectionHeader title="Trending Now" actionLabel="See all" />
+              <SectionHeader 
+                title="Trending Now" 
+                actionLabel="See trending"
+                onActionPress={() => {
+                  setActiveFilter('Electronics');
+                  setShowFilters(true);
+                }}
+              />
               <ProductGrid products={featuredProducts.slice(2, 6)} viewMode={viewMode} />
+            </View>
+
+            <View style={[styles.section, { paddingHorizontal: padding }]}>
+              <SectionHeader 
+                title="Recommended for You" 
+                actionLabel="Update preferences"
+                onActionPress={() => Alert.alert('Recommendations', 'Based on your browsing history and preferences. Update your interests in Profile > Settings.')}
+              />
+              <ProductGrid products={featuredProducts.slice(1, 5)} viewMode={viewMode} />
             </View>
           </>
         )}

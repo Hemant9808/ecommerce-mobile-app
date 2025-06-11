@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import { Search, Heart, Grid, List } from 'lucide-react-native';
 import ProductGrid from '@/components/products/ProductGrid';
 import SectionHeader from '@/components/common/SectionHeader';
@@ -13,10 +13,37 @@ export default function WishlistScreen() {
     isSmallDevice, 
     isMediumDevice, 
     isLargeDevice,
-    dimensions 
+    dimensions,
+    addToCart,
+    removeFromWishlist
   } = useAppContext();
   
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  const handleMoveToCart = (product: any) => {
+    addToCart(product);
+    removeFromWishlist(product.id);
+    Alert.alert(
+      'Moved to Cart!',
+      `${product.name} has been moved from wishlist to cart.`,
+      [{ text: 'OK' }]
+    );
+  };
+
+  const handleRemoveFromWishlist = (product: any) => {
+    Alert.alert(
+      'Remove from Wishlist',
+      `Remove ${product.name} from your wishlist?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Remove', 
+          style: 'destructive',
+          onPress: () => removeFromWishlist(product.id)
+        }
+      ]
+    );
+  };
 
   // Filter wishlist items based on search query
   const filteredWishlistItems = useMemo(() => {

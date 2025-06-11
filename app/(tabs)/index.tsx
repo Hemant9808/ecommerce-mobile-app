@@ -15,7 +15,11 @@ export default function HomeScreen() {
   const handleSearch = (text: string) => {
     setSearchQuery(text);
     if (text.trim().length > 0) {
-      router.push('/(tabs)/products');
+      // Navigate to products screen with search query
+      router.push({
+        pathname: '/(tabs)/products',
+        params: { search: text.trim() }
+      });
     }
   };
 
@@ -79,7 +83,15 @@ export default function HomeScreen() {
           <View style={styles.actionButtons}>
             <TouchableOpacity
               style={[styles.actionButton, { width: cartButtonSize, height: cartButtonSize }]}
-              onPress={() => Alert.alert('Notifications', 'Demo notifications:\n• New offers available\n• Order updates\n• Special deals')}
+              onPress={() => Alert.alert(
+                'Notifications', 
+                '🔔 Recent Notifications:\n\n📦 Your order #12346 is out for delivery\n\n💰 Flash Sale: 70% off Electronics!\n\n🎁 Welcome bonus: $10 off your next order\n\n📱 New arrivals in your favorite categories\n\n⭐ Rate your recent purchase',
+                [
+                  { text: 'Mark All Read', onPress: () => Alert.alert('All notifications marked as read!') },
+                  { text: 'Settings', onPress: () => Alert.alert('Notification Settings', 'Configure your notification preferences in Profile > Settings') },
+                  { text: 'OK' }
+                ]
+              )}
               activeOpacity={0.8}
             >
               <Bell size={isSmallDevice ? 18 : isLargeDevice ? 22 : 20} color="#333" />
@@ -131,7 +143,12 @@ export default function HomeScreen() {
               value={searchQuery}
               onChangeText={handleSearch}
               returnKeyType="search"
-              onSubmitEditing={() => handleSearch(searchQuery)}
+              onSubmitEditing={() => {
+                if (searchQuery.trim().length > 0) {
+                  handleSearch(searchQuery);
+                }
+              }}
+              clearButtonMode="while-editing"
             />
           </View>
         </View>
