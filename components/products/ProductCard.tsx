@@ -242,6 +242,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 16,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#EEE',
     ...Platform.select({
       ios: {
         shadowColor: '#000',

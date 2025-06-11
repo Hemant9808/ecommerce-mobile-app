@@ -72,7 +72,7 @@ export default function CategorySection() {
 
   const getIconSize = () => {
     if (isSmallDevice) return 50;
-    if (isMediumDevice) return 60;
+    if (isMediumDevice) return 55;
     return 70;
   };
 

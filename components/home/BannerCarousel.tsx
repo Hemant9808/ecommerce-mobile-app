@@ -19,8 +19,8 @@ export default function BannerCarousel() {
   };
 
   const getItemHeight = () => {
-    if (isSmallDevice) return 160;
-    if (isMediumDevice) return 200;
+    if (isSmallDevice) return 120;
+    if (isMediumDevice) return 180;
     return 240;
   };
 

@@ -65,7 +65,7 @@ export default function FlashSellSection() {
   };
 
   const getCardHeight = () => {
-    if (isSmallDevice) return 200;
+    if (isSmallDevice) return 220;
     if (isMediumDevice) return 220;
     return 240;
   };
@@ -435,6 +435,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4B7BF5',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 0,
     ...Platform.select({
       ios: {
         shadowColor: '#4B7BF5',
