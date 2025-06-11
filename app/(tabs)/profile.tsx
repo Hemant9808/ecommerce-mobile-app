@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView, Platform, Alert } from 'react-native';
-import { Settings, CreditCard, Package, Heart, LogOut, ChevronRight, User, Edit } from 'lucide-react-native';
+import { Settings, CreditCard, Package, Heart, LogOut, ChevronRight, User, Edit, MapPin, HelpCircle } from 'lucide-react-native';
 import { useAppContext } from '@/context/AppContext';
 import { router } from 'expo-router';
 
@@ -14,43 +14,26 @@ export default function ProfileScreen() {
     return 22;
   };
 
-  const iconSize = getIconSize();
-
-  // Handle profile option navigation
+  const iconSize = getIconSize();  // Handle profile option navigation
   const handleProfileOptionPress = (option: string) => {
     switch (option) {
       case 'My Orders':
-        Alert.alert(
-          'My Orders',
-          'View your order history and track current orders.',
-          [
-            { text: 'View Demo Orders', onPress: () => showDemoOrders() },
-            { text: 'Cancel', style: 'cancel' }
-          ]
-        );
+        router.push('/orders');
         break;
       case 'Payment Methods':
-        Alert.alert(
-          'Payment Methods',
-          'Manage your payment methods and billing information.',
-          [
-            { text: 'Add Payment Method', onPress: () => showPaymentMethods() },
-            { text: 'Cancel', style: 'cancel' }
-          ]
-        );
+        router.push('/payment-methods');
+        break;
+      case 'My Addresses':
+        router.push('/addresses');
         break;
       case 'My Wishlist':
         router.push('/(tabs)/wishlist');
         break;
       case 'Settings':
-        Alert.alert(
-          'Settings',
-          'Configure your app preferences and account settings.',
-          [
-            { text: 'Open Settings', onPress: () => showSettings() },
-            { text: 'Cancel', style: 'cancel' }
-          ]
-        );
+        router.push('/settings');
+        break;
+      case 'Help & Support':
+        router.push('/help-support');
         break;
       case 'Logout':
         Alert.alert(
@@ -66,62 +49,8 @@ export default function ProfileScreen() {
         break;
     }
   };
-
   const handleEditProfile = () => {
-    Alert.alert(
-      'Edit Profile',
-      'Update your profile information and preferences.',
-      [
-        { text: 'Edit Profile', onPress: () => showEditProfile() },
-        { text: 'Cancel', style: 'cancel' }
-      ]
-    );
-  };
-  const showDemoOrders = () => {
-    Alert.alert(
-      'My Orders',
-      'Demo Order History:\n\n📦 Order #12345\n• iPhone 15 Pro - $999.99\n• Status: Delivered\n• Date: Dec 5, 2024\n\n📦 Order #12346\n• Wireless Headphones - $249.99\n• Status: In Transit\n• Date: Dec 8, 2024\n\n📦 Order #12347\n• Premium T-Shirt - $29.99\n• Status: Processing\n• Date: Dec 10, 2024',
-      [
-        { text: 'Track Orders', onPress: () => Alert.alert('Order Tracking', 'Demo: Track your orders in real-time with push notifications and detailed status updates.') },
-        { text: 'OK' }
-      ]
-    );
-  };
-
-  const showPaymentMethods = () => {
-    Alert.alert(
-      'Payment Methods',
-      'Demo Payment Methods:\n\n💳 Visa ending in 1234\n• Expires: 12/27\n• Primary method\n\n💳 Mastercard ending in 5678\n• Expires: 08/26\n\n📱 PayPal Account\n• john.doe@email.com\n\n🍎 Apple Pay\n• Touch/Face ID enabled',
-      [
-        { text: 'Add New Card', onPress: () => Alert.alert('Add Payment Method', 'Demo: Add a new credit card, debit card, or link your PayPal account.') },
-        { text: 'Manage', onPress: () => Alert.alert('Manage Cards', 'Demo: Edit, remove, or set default payment methods.') },
-        { text: 'OK' }
-      ]
-    );
-  };
-
-  const showSettings = () => {
-    Alert.alert(
-      'Settings',
-      'Demo App Settings:\n\n🔔 Notifications\n• Push notifications: ON\n• Email updates: ON\n• SMS alerts: OFF\n\n🌍 Language & Region\n• Language: English\n• Currency: USD\n• Time zone: EST\n\n🎨 Appearance\n• Theme: Auto (System)\n• Dark mode: Auto\n\n🔒 Privacy & Security\n• Two-factor auth: ON\n• Biometric login: ON',
-      [
-        { text: 'Notification Settings', onPress: () => Alert.alert('Notifications', 'Demo: Configure push notifications, email alerts, and SMS preferences.') },
-        { text: 'Privacy Settings', onPress: () => Alert.alert('Privacy', 'Demo: Manage data sharing, cookies, and account privacy settings.') },
-        { text: 'OK' }
-      ]
-    );
-  };
-  const showEditProfile = () => {
-    Alert.alert(
-      'Edit Profile',
-      'Demo Profile Editor:\n\n👤 Personal Information\n• Full Name: John Doe\n• Email: john.doe@email.com\n• Phone: +1 (555) 123-4567\n• Birthday: January 15, 1990\n\n📍 Address Information\n• Home: 123 Main St, NYC\n• Work: 456 Business Ave, NYC\n\n🔒 Account Security\n• Password: ••••••••\n• Two-factor auth: Enabled',
-      [
-        { text: 'Change Photo', onPress: () => Alert.alert('Change Photo', 'Demo: Upload a new profile picture from camera or gallery.') },
-        { text: 'Update Info', onPress: () => Alert.alert('Update Profile', 'Demo: Modify your personal information and contact details.') },
-        { text: 'Security', onPress: () => Alert.alert('Security Settings', 'Demo: Change password, manage two-factor authentication, and review login activity.') },
-        { text: 'Cancel', style: 'cancel' }
-      ]
-    );
+    router.push('/edit-profile');
   };
 
   const handleLogout = () => {
@@ -146,9 +75,7 @@ export default function ProfileScreen() {
         }
       ]
     );
-  };
-
-  const profileOptions = [
+  };  const profileOptions = [
     { 
       title: 'My Orders',
       icon: <Package size={iconSize} color="#333" />,
@@ -162,6 +89,12 @@ export default function ProfileScreen() {
       onPress: () => handleProfileOptionPress('Payment Methods')
     },
     { 
+      title: 'My Addresses',
+      icon: <MapPin size={iconSize} color="#333" />,
+      subtitle: 'Manage shipping and billing addresses',
+      onPress: () => handleProfileOptionPress('My Addresses')
+    },
+    { 
       title: 'My Wishlist',
       icon: <Heart size={iconSize} color="#333" />,
       subtitle: 'Your saved products',
@@ -173,6 +106,12 @@ export default function ProfileScreen() {
       icon: <Settings size={iconSize} color="#333" />,
       subtitle: 'Notifications, password, language',
       onPress: () => handleProfileOptionPress('Settings')
+    },
+    { 
+      title: 'Help & Support',
+      icon: <HelpCircle size={iconSize} color="#333" />,
+      subtitle: 'FAQ, contact us, send feedback',
+      onPress: () => handleProfileOptionPress('Help & Support')
     },
     { 
       title: 'Logout',
@@ -346,9 +285,7 @@ export default function ProfileScreen() {
               )}
             </TouchableOpacity>
           ))}
-        </View>
-
-        {/* Stats Section */}
+        </View>        {/* Stats Section */}
         <View style={[
           styles.statsContainer,
           { 
@@ -368,7 +305,11 @@ export default function ProfileScreen() {
           </Text>
           
           <View style={styles.statsRow}>
-            <View style={styles.statItem}>
+            <TouchableOpacity 
+              style={styles.statItem}
+              onPress={() => router.push('/orders')}
+              activeOpacity={0.7}
+            >
               <Text style={[
                 styles.statNumber,
                 { fontSize: isSmallDevice ? 18 : isMediumDevice ? 20 : 22 }
@@ -381,14 +322,18 @@ export default function ProfileScreen() {
               ]}>
                 Orders
               </Text>
-            </View>
+            </TouchableOpacity>
             
-            <View style={styles.statItem}>
+            <TouchableOpacity 
+              style={styles.statItem}
+              onPress={() => router.push('/(tabs)/wishlist')}
+              activeOpacity={0.7}
+            >
               <Text style={[
                 styles.statNumber,
                 { fontSize: isSmallDevice ? 18 : isMediumDevice ? 20 : 22 }
               ]}>
-                8
+                {wishlistItems.length}
               </Text>
               <Text style={[
                 styles.statLabel,
@@ -396,22 +341,26 @@ export default function ProfileScreen() {
               ]}>
                 Wishlist
               </Text>
-            </View>
+            </TouchableOpacity>
             
-            <View style={styles.statItem}>
+            <TouchableOpacity 
+              style={styles.statItem}
+              onPress={() => router.push('/(tabs)/cart')}
+              activeOpacity={0.7}
+            >
               <Text style={[
                 styles.statNumber,
                 { fontSize: isSmallDevice ? 18 : isMediumDevice ? 20 : 22 }
               ]}>
-                24
+                {cartItems.length}
               </Text>
               <Text style={[
                 styles.statLabel,
                 { fontSize: isSmallDevice ? 11 : 12 }
               ]}>
-                Reviews
+                Cart Items
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 
