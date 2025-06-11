@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TextInput, TouchableOpacity, Dimensions } from 'react-native';
-import { Search, ShoppingBag } from 'lucide-react-native';
+import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { Search, ShoppingBag, Bell } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BannerCarousel from '@/components/home/BannerCarousel';
 import CategorySection from '@/components/home/CategorySection';
 import FlashSellSection from '@/components/home/FlashSellSection';
@@ -8,7 +9,8 @@ import { useAppContext } from '@/context/AppContext';
 import { router } from 'expo-router';
 
 export default function HomeScreen() {
-  const { searchQuery, setSearchQuery, cartItems, isSmallDevice, isMediumDevice, isLargeDevice } = useAppContext();
+  const { searchQuery, setSearchQuery, cartItems, isSmallDevice, isMediumDevice, isLargeDevice, dimensions } = useAppContext();
+  const insets = useSafeAreaInsets();
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -17,119 +19,237 @@ export default function HomeScreen() {
     }
   };
 
+  // Responsive styling functions
+  const getHeaderPadding = () => {
+    if (isSmallDevice) return { horizontal: 12, vertical: 8 };
+    if (isMediumDevice) return { horizontal: 16, vertical: 12 };
+    return { horizontal: 20, vertical: 16 };
+  };
+
+  const getSearchBarStyle = () => {
+    const base = {
+      borderRadius: isLargeDevice ? 28 : 24,
+      paddingHorizontal: isSmallDevice ? 12 : isLargeDevice ? 20 : 16,
+      paddingVertical: isSmallDevice ? 8 : isLargeDevice ? 12 : 10,
+    };
+    return base;
+  };
+
+  const getCartButtonSize = () => {
+    if (isSmallDevice) return 40;
+    if (isMediumDevice) return 44;
+    return 48;
+  };
+
+  const headerPadding = getHeaderPadding();
+  const cartButtonSize = getCartButtonSize();
+
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header with Search and Cart */}
-        <View style={styles.header}>
-          <View style={styles.searchContainer}>
-            <View style={[
-              styles.searchBar,
-              isSmallDevice && styles.searchBarSmall
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
+      >
+        {/* Enhanced Header with Search, Cart, and Notifications */}
+        <View style={[
+          styles.header,
+          {
+            paddingTop: insets.top + headerPadding.vertical,
+            paddingHorizontal: headerPadding.horizontal,
+            paddingBottom: headerPadding.vertical,
+          }
+        ]}>
+          {/* Welcome Text */}
+          <View style={styles.welcomeContainer}>
+            <Text style={[
+              styles.welcomeText,
+              { fontSize: isSmallDevice ? 14 : isLargeDevice ? 18 : 16 }
             ]}>
-              <Search size={isSmallDevice ? 16 : 20} color="#777" />
-              <TextInput
-                style={[
-                  styles.searchInput,
-                  isSmallDevice && styles.searchInputSmall
-                ]}
-                placeholder="Search products"
-                placeholderTextColor="#777"
-                value={searchQuery}
-                onChangeText={handleSearch}
-              />
-            </View>
+              Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 18 ? 'Afternoon' : 'Evening'}!
+            </Text>
+            <Text style={[
+              styles.subtitle,
+              { fontSize: isSmallDevice ? 22 : isLargeDevice ? 28 : 24 }
+            ]}>
+              Find your favorite products
+            </Text>
           </View>
 
-          <TouchableOpacity
-            style={styles.cartButton}
-            onPress={() => router.push('/(tabs)/cart')}
-          >
-            <ShoppingBag size={isSmallDevice ? 20 : 24} color="#333" />
-            {cartItems.length > 0 && (
-              <View style={styles.cartBadge}>
-                <Text style={styles.cartBadgeText}>{cartItems.length}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
+          {/* Action Buttons */}
+          <View style={styles.actionButtons}>
+            <TouchableOpacity
+              style={[styles.actionButton, { width: cartButtonSize, height: cartButtonSize }]}
+              onPress={() => router.push('/(tabs)/wishlist')}
+            >
+              <Bell size={isSmallDevice ? 18 : isLargeDevice ? 22 : 20} color="#333" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.actionButton, { width: cartButtonSize, height: cartButtonSize }]}
+              onPress={() => router.push('/(tabs)/cart')}
+            >
+              <ShoppingBag size={isSmallDevice ? 18 : isLargeDevice ? 22 : 20} color="#333" />
+              {cartItems.length > 0 && (
+                <View style={[
+                  styles.cartBadge,
+                  {
+                    minWidth: isSmallDevice ? 18 : 20,
+                    height: isSmallDevice ? 18 : 20,
+                  }
+                ]}>
+                  <Text style={[
+                    styles.cartBadgeText,
+                    { fontSize: isSmallDevice ? 8 : 10 }
+                  ]}>
+                    {cartItems.length > 99 ? '99+' : cartItems.length}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
 
-        {/* Banner Carousel */}
-        <BannerCarousel />
+        {/* Enhanced Search Bar */}
+        <View style={[
+          styles.searchSection,
+          { paddingHorizontal: headerPadding.horizontal }
+        ]}>
+          <View style={[styles.searchBar, getSearchBarStyle()]}>
+            <Search
+              size={isSmallDevice ? 16 : isLargeDevice ? 22 : 20}
+              color="#777"
+            />
+            <TextInput
+              style={[
+                styles.searchInput,
+                { fontSize: isSmallDevice ? 12 : isLargeDevice ? 16 : 14 }
+              ]}
+              placeholder="Search for products, brands..."
+              placeholderTextColor="#777"
+              value={searchQuery}
+              onChangeText={handleSearch}
+              returnKeyType="search"
+              onSubmitEditing={() => handleSearch(searchQuery)}
+            />
+          </View>
+        </View>
 
-        {/* Popular Categories */}
-        <CategorySection />
+        {/* Content Sections */}
+        <View style={styles.content}>
+          {/* Banner Carousel */}
+          <BannerCarousel />
 
-        {/* Flash Sell */}
-        <FlashSellSection />
+          {/* Popular Categories */}
+          <CategorySection />
+
+          {/* Flash Sell */}
+          <FlashSellSection />
+        </View>
       </ScrollView>
     </View>
   );
 }
 
-const { width } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F7',
+    backgroundColor: '#F8F9FA',
   },
   header: {
+    backgroundColor: '#FFFFFF',
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  searchContainer: {
+  welcomeContainer: {
     flex: 1,
+    paddingRight: 16,
   },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EAEAEA',
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
-  searchBarSmall: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  searchInput: {
-    flex: 1,
-    marginLeft: 8,
+  welcomeText: {
     fontFamily: 'Inter-Regular',
-    fontSize: 14,
-    color: '#333',
+    color: '#666',
+    marginBottom: 4,
   },
-  searchInputSmall: {
-    fontSize: 12,
+  subtitle: {
+    fontFamily: 'Inter-Bold',
+    color: '#1A1A1A',
+    lineHeight: 28,
   },
-  cartButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#EAEAEA',
+  actionButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  actionButton: {
+    borderRadius: 24,
+    backgroundColor: '#F5F5F7',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 12,
     position: 'relative',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
   cartBadge: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    top: -2,
+    right: -2,
     backgroundColor: '#FF4D67',
     borderRadius: 10,
-    minWidth: 20,
-    height: 20,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 4,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
   },
   cartBadgeText: {
     color: '#FFF',
     fontFamily: 'Inter-Bold',
-    fontSize: 10,
+  },
+  searchSection: {
+    backgroundColor: '#FFFFFF',
+    paddingBottom: 16,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F5F5F7',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: 12,
+    fontFamily: 'Inter-Regular',
+    color: '#333',
+    paddingVertical: 4,
+  },
+  content: {
+    backgroundColor: '#F8F9FA',
   },
 });

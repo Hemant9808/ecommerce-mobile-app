@@ -57,10 +57,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     height: Dimensions.get('window').height,
   });
 
-  // Calculate device size
-  const isSmallDevice = dimensions.width < 375;
-  const isMediumDevice = dimensions.width >= 375 && dimensions.width < 768;
-  const isLargeDevice = dimensions.width >= 768;
+  // Calculate device size with better breakpoints
+  const isSmallDevice = dimensions.width < 390;  // iPhone SE and similar small devices
+  const isMediumDevice = dimensions.width >= 390 && dimensions.width < 768;  // Most phones
+  const isLargeDevice = dimensions.width >= 768;  // Tablets and larger devices
 
   // Update dimensions on window resize
   useEffect(() => {

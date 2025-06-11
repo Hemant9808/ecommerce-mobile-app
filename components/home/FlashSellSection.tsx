@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { Heart } from 'lucide-react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
+import { Heart, Plus } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import SectionHeader from '@/components/common/SectionHeader';
 import { flashSaleProducts } from '@/data/products';
+import { useAppContext } from '@/context/AppContext';
+import { router } from 'expo-router';
 
 export default function FlashSellSection() {
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 14,
+    minutes: 25,
+    seconds: 37
+  });
+  
+  const { isSmallDevice, isMediumDevice, isLargeDevice, addToCart } = useAppContext();
 
   const toggleFavorite = (productId: string) => {
     if (favorites.includes(productId)) {
@@ -15,63 +25,232 @@ export default function FlashSellSection() {
     }
   };
 
-  // Calculate remaining time for flash sale
-  const hours = 14;
-  const minutes = 25;
-  const seconds = 37;
+  const handleProductPress = (productId: string) => {
+    router.push(`/product/${productId}`);
+  };
+
+  const handleAddToCart = (product: any) => {
+    addToCart(product);
+  };
+
+  // Live countdown timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        let { hours, minutes, seconds } = prev;
+        
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        }
+        
+        return { hours, minutes, seconds };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Responsive sizing functions
+  const getCardWidth = () => {
+    if (isSmallDevice) return 140;
+    if (isMediumDevice) return 160;
+    return 180;
+  };
+
+  const getCardHeight = () => {
+    if (isSmallDevice) return 200;
+    if (isMediumDevice) return 220;
+    return 240;
+  };
+
+  const getPadding = () => {
+    if (isSmallDevice) return 12;
+    if (isMediumDevice) return 16;
+    return 20;
+  };
+
+  const cardWidth = getCardWidth();
+  const cardHeight = getCardHeight();
+  const padding = getPadding();
+
+  const formatTime = (value: number) => value.toString().padStart(2, '0');
 
   return (
     <View style={styles.container}>
-      <SectionHeader title="Flash Sell" actionLabel="See all" />
-
-      <View style={styles.timerContainer}>
-        <Text style={styles.timerLabel}>Ends in</Text>
-        <View style={styles.timerBoxesContainer}>
-          <View style={styles.timerBox}>
-            <Text style={styles.timerValue}>{hours}</Text>
-          </View>
-          <Text style={styles.timerSeparator}>:</Text>
-          <View style={styles.timerBox}>
-            <Text style={styles.timerValue}>{minutes}</Text>
-          </View>
-          <Text style={styles.timerSeparator}>:</Text>
-          <View style={styles.timerBox}>
-            <Text style={styles.timerValue}>{seconds}</Text>
-          </View>
-        </View>
+      <View style={{ paddingHorizontal: padding }}>
+        <SectionHeader title="⚡ Flash Sale" actionLabel="See all" />
       </View>
 
+      {/* Enhanced Timer Section */}
+      <View style={[styles.timerContainer, { paddingHorizontal: padding }]}>
+        <LinearGradient
+          colors={['#FF6B6B', '#FF8E8E']}
+          style={styles.timerGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+        >
+          <Text style={[
+            styles.timerLabel,
+            { fontSize: isSmallDevice ? 14 : isLargeDevice ? 18 : 16 }
+          ]}>
+            🔥 Sale ends in
+          </Text>
+          <View style={styles.timerBoxesContainer}>
+            <View style={[styles.timerBox, { minWidth: isSmallDevice ? 32 : 40 }]}>
+              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>
+                {formatTime(timeLeft.hours)}
+              </Text>
+              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>
+                HRS
+              </Text>
+            </View>
+            <Text style={[styles.timerSeparator, { fontSize: isSmallDevice ? 16 : 20 }]}>
+              :
+            </Text>
+            <View style={[styles.timerBox, { minWidth: isSmallDevice ? 32 : 40 }]}>
+              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>
+                {formatTime(timeLeft.minutes)}
+              </Text>
+              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>
+                MIN
+              </Text>
+            </View>
+            <Text style={[styles.timerSeparator, { fontSize: isSmallDevice ? 16 : 20 }]}>
+              :
+            </Text>
+            <View style={[styles.timerBox, { minWidth: isSmallDevice ? 32 : 40 }]}>
+              <Text style={[styles.timerValue, { fontSize: isSmallDevice ? 14 : 16 }]}>
+                {formatTime(timeLeft.seconds)}
+              </Text>
+              <Text style={[styles.timerUnit, { fontSize: isSmallDevice ? 8 : 10 }]}>
+                SEC
+              </Text>
+            </View>
+          </View>
+        </LinearGradient>
+      </View>
+
+      {/* Enhanced Product Scroll */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.productsScroll}
+        contentContainerStyle={[styles.productsScroll, { paddingHorizontal: padding }]}
+        decelerationRate="fast"
       >
-        {flashSaleProducts.map(product => (
-          <TouchableOpacity key={product.id} style={styles.productCard}>
-            <View style={styles.productImageContainer}>
+        {flashSaleProducts.map((product, index) => (
+          <TouchableOpacity
+            key={product.id}
+            style={[
+              styles.productCard,
+              {
+                width: cardWidth,
+                height: cardHeight,
+                marginRight: index === flashSaleProducts.length - 1 ? 0 : 12,
+              }
+            ]}
+            onPress={() => handleProductPress(product.id)}
+            activeOpacity={0.9}
+          >
+            {/* Discount Badge */}
+            <View style={styles.discountBadge}>
+              <Text style={[styles.discountText, { fontSize: isSmallDevice ? 10 : 12 }]}>
+                -{Math.round((1 - product.price / (product.price * 1.3)) * 100)}%
+              </Text>
+            </View>
+
+            <View style={[
+              styles.productImageContainer,
+              { height: cardHeight * 0.6 }
+            ]}>
               <Image source={{ uri: product.image }} style={styles.productImage} />
-              <TouchableOpacity 
-                style={styles.favoriteButton}
+              <TouchableOpacity
                 onPress={() => toggleFavorite(product.id)}
+                style={[
+                  styles.favoriteButton,
+                  {
+                    width: isSmallDevice ? 28 : 32,
+                    height: isSmallDevice ? 28 : 32,
+                    borderRadius: isSmallDevice ? 14 : 16,
+                  }
+                ]}
+                activeOpacity={0.8}
               >
-                <Heart 
-                  size={18} 
-                  color={favorites.includes(product.id) ? '#FF4D67' : '#666'} 
-                  fill={favorites.includes(product.id) ? '#FF4D67' : 'transparent'} 
+                <Heart
+                  size={isSmallDevice ? 14 : 16}
+                  color={favorites.includes(product.id) ? '#FF3040' : '#666'}
+                  fill={favorites.includes(product.id) ? '#FF3040' : 'transparent'}
                 />
               </TouchableOpacity>
             </View>
-            <View style={styles.productInfo}>
-              <Text style={styles.productName}>{product.name}</Text>
+
+            <View style={[
+              styles.productInfo,
+              {
+                padding: isSmallDevice ? 8 : 12,
+                height: cardHeight * 0.4,
+              }
+            ]}>
+              <Text style={[
+                styles.productName,
+                { fontSize: isSmallDevice ? 12 : isLargeDevice ? 16 : 14 }
+              ]} numberOfLines={2}>
+                {product.name}
+              </Text>
+              
               <View style={styles.priceRow}>
-                <Text style={styles.productPrice}>${product.price}</Text>
-                <Text style={styles.productPriceUnit}>USD</Text>
+                <Text style={[
+                  styles.productPrice,
+                  { fontSize: isSmallDevice ? 14 : isLargeDevice ? 18 : 16 }
+                ]}>
+                  ${product.price}
+                </Text>
+                <Text style={[
+                  styles.originalPrice,
+                  { fontSize: isSmallDevice ? 10 : 12 }
+                ]}>
+                  ${(product.price * 1.3).toFixed(2)}
+                </Text>
               </View>
-              <View style={styles.badgeRow}>
-                <Text style={styles.soldBadge}>{product.sold} sold</Text>
-                {product.onStock && (
-                  <Text style={styles.stockBadge}>On stock: {product.onStock}</Text>
-                )}
+
+              <View style={styles.bottomRow}>
+                <View style={styles.stockInfo}>
+                  <Text style={[
+                    styles.soldBadge,
+                    { fontSize: isSmallDevice ? 9 : 10 }
+                  ]}>
+                    {product.sold} sold
+                  </Text>
+                  {product.onStock && product.onStock < 10 && (
+                    <Text style={[
+                      styles.stockBadge,
+                      { fontSize: isSmallDevice ? 9 : 10 }
+                    ]}>
+                      {product.onStock} left
+                    </Text>
+                  )}
+                </View>
+                
+                <TouchableOpacity
+                  style={[
+                    styles.addButton,
+                    {
+                      width: isSmallDevice ? 24 : 28,
+                      height: isSmallDevice ? 24 : 28,
+                      borderRadius: isSmallDevice ? 12 : 14,
+                    }
+                  ]}
+                  onPress={() => handleAddToCart(product)}
+                  activeOpacity={0.8}
+                >
+                  <Plus size={isSmallDevice ? 12 : 14} color="#FFF" strokeWidth={2.5} />
+                </TouchableOpacity>
               </View>
             </View>
           </TouchableOpacity>
@@ -83,118 +262,192 @@ export default function FlashSellSection() {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 24,
-    paddingLeft: 16,
+    backgroundColor: '#FFF',
+    paddingBottom: 20,
   },
   timerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: 16,
   },
+  timerGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    marginHorizontal: 4,
+  },
   timerLabel: {
-    fontFamily: 'Inter-Medium',
-    fontSize: 14,
-    color: '#666',
-    marginRight: 12,
+    fontFamily: 'Inter-Bold',
+    color: '#FFF',
+    flex: 1,
   },
   timerBoxesContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   timerBox: {
-    backgroundColor: '#333',
-    borderRadius: 4,
-    width: 28,
-    height: 28,
-    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 8,
     alignItems: 'center',
+    backdropFilter: 'blur(10px)',
   },
   timerValue: {
-    fontFamily: 'Inter-SemiBold',
-    fontSize: 14,
+    fontFamily: 'Inter-Bold',
     color: '#FFF',
+    lineHeight: 18,
+  },
+  timerUnit: {
+    fontFamily: 'Inter-Medium',
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginTop: -2,
   },
   timerSeparator: {
     fontFamily: 'Inter-Bold',
-    fontSize: 14,
-    color: '#333',
+    color: '#FFF',
     marginHorizontal: 4,
   },
   productsScroll: {
-    paddingRight: 16,
+    // Dynamic padding applied inline
   },
   productCard: {
-    width: 160,
-    marginRight: 16,
-    borderRadius: 12,
     backgroundColor: '#FFF',
+    borderRadius: 16,
     overflow: 'hidden',
+    position: 'relative',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
+  },
+  discountBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    backgroundColor: '#FF3040',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    zIndex: 10,
+  },
+  discountText: {
+    fontFamily: 'Inter-Bold',
+    color: '#FFF',
   },
   productImageContainer: {
     position: 'relative',
-    height: 160,
+    width: '100%',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    overflow: 'hidden',
   },
   productImage: {
     width: '100%',
     height: '100%',
+    resizeMode: 'cover',
   },
   favoriteButton: {
     position: 'absolute',
     top: 8,
     right: 8,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     justifyContent: 'center',
     alignItems: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   productInfo: {
-    padding: 12,
+    justifyContent: 'space-between',
   },
   productName: {
     fontFamily: 'Inter-SemiBold',
-    fontSize: 14,
     color: '#333',
     marginBottom: 6,
+    lineHeight: 18,
   },
   priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 8,
   },
   productPrice: {
     fontFamily: 'Inter-Bold',
-    fontSize: 14,
-    color: '#333',
-    marginRight: 4,
+    color: '#FF3040',
+    marginRight: 8,
   },
-  productPriceUnit: {
+  originalPrice: {
     fontFamily: 'Inter-Regular',
-    fontSize: 12,
-    color: '#666',
+    color: '#999',
+    textDecorationLine: 'line-through',
   },
-  badgeRow: {
+  bottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  stockInfo: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   soldBadge: {
     fontFamily: 'Inter-Regular',
-    fontSize: 11,
     color: '#666',
-    backgroundColor: '#F5F5F7',
+    backgroundColor: '#F0F0F2',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: 6,
     marginRight: 6,
   },
   stockBadge: {
     fontFamily: 'Inter-Regular',
-    fontSize: 11,
-    color: '#666',
-    backgroundColor: '#F5F5F7',
+    color: '#FF3040',
+    backgroundColor: '#FFE5E5',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
+    borderRadius: 6,
+  },
+  addButton: {
+    backgroundColor: '#4B7BF5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#4B7BF5',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
 });

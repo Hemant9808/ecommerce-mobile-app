@@ -1,32 +1,34 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { Settings, CreditCard, Package, Heart, LogOut, ChevronRight } from 'lucide-react-native';
+import { useAppContext } from '@/context/AppContext';
 
 export default function ProfileScreen() {
+  const { isSmallDevice, isMediumDevice } = useAppContext();
   const profileOptions = [
     { 
       title: 'My Orders',
-      icon: <Package size={20} color="#333" />,
+      icon: <Package size={isSmallDevice ? 18 : 20} color="#333" />,
       subtitle: 'Track, return, or buy things again'
     },
     { 
       title: 'Payment Methods',
-      icon: <CreditCard size={20} color="#333" />,
+      icon: <CreditCard size={isSmallDevice ? 18 : 20} color="#333" />,
       subtitle: 'Add or remove payment methods'
     },
     { 
       title: 'My Wishlist',
-      icon: <Heart size={20} color="#333" />,
+      icon: <Heart size={isSmallDevice ? 18 : 20} color="#333" />,
       subtitle: 'Your saved products'
     },
     { 
       title: 'Settings',
-      icon: <Settings size={20} color="#333" />,
+      icon: <Settings size={isSmallDevice ? 18 : 20} color="#333" />,
       subtitle: 'Notifications, password, language'
     },
     { 
       title: 'Logout',
-      icon: <LogOut size={20} color="#EA4335" />,
+      icon: <LogOut size={isSmallDevice ? 18 : 20} color="#EA4335" />,
       subtitle: 'Log out from your account',
       isDanger: true
     },
@@ -36,47 +38,85 @@ export default function ProfileScreen() {
     <View style={styles.container}>
       <ScrollView>
         {/* Profile Header */}
-        <View style={styles.header}>
+        <View style={[
+          styles.header,
+          isSmallDevice && styles.headerSmall
+        ]}>
           <View style={styles.profileSection}>
             <Image 
               source={{ uri: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg' }} 
-              style={styles.profileImage} 
+              style={[
+                styles.profileImage,
+                isSmallDevice && styles.profileImageSmall
+              ]} 
             />
             <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>John Doe</Text>
-              <Text style={styles.profileEmail}>johndoe@example.com</Text>
+              <Text style={[
+                styles.profileName,
+                isSmallDevice && styles.profileNameSmall
+              ]}>John Doe</Text>
+              <Text style={[
+                styles.profileEmail,
+                isSmallDevice && styles.profileEmailSmall
+              ]}>johndoe@example.com</Text>
             </View>
-            <TouchableOpacity style={styles.editButton}>
-              <Text style={styles.editButtonText}>Edit</Text>
+            <TouchableOpacity style={[
+              styles.editButton,
+              isSmallDevice && styles.editButtonSmall
+            ]}>
+              <Text style={[
+                styles.editButtonText,
+                isSmallDevice && styles.editButtonTextSmall
+              ]}>Edit</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Profile Options */}
-        <View style={styles.optionsContainer}>
+        <View style={[
+          styles.optionsContainer,
+          isSmallDevice && styles.optionsContainerSmall
+        ]}>
           {profileOptions.map((option, index) => (
             <TouchableOpacity 
               key={index} 
               style={[
                 styles.optionItem,
+                isSmallDevice && styles.optionItemSmall,
                 index === profileOptions.length - 1 && styles.lastOptionItem
               ]}
             >
-              <View style={styles.optionIconContainer}>{option.icon}</View>
+              <View style={[
+                styles.optionIconContainer,
+                isSmallDevice && styles.optionIconContainerSmall
+              ]}>{option.icon}</View>
               <View style={styles.optionContent}>
-                <Text style={[styles.optionTitle, option.isDanger && styles.dangerText]}>
+                <Text style={[
+                  styles.optionTitle, 
+                  isSmallDevice && styles.optionTitleSmall,
+                  option.isDanger && styles.dangerText
+                ]}>
                   {option.title}
                 </Text>
-                <Text style={styles.optionSubtitle}>{option.subtitle}</Text>
+                <Text style={[
+                  styles.optionSubtitle,
+                  isSmallDevice && styles.optionSubtitleSmall
+                ]}>{option.subtitle}</Text>
               </View>
-              {!option.isDanger && <ChevronRight size={20} color="#999" />}
+              {!option.isDanger && <ChevronRight size={isSmallDevice ? 18 : 20} color="#999" />}
             </TouchableOpacity>
           ))}
         </View>
 
         {/* App Version */}
-        <View style={styles.versionContainer}>
-          <Text style={styles.versionText}>App Version 1.0.0</Text>
+        <View style={[
+          styles.versionContainer,
+          isSmallDevice && styles.versionContainerSmall
+        ]}>
+          <Text style={[
+            styles.versionText,
+            isSmallDevice && styles.versionTextSmall
+          ]}>App Version 1.0.0</Text>
         </View>
       </ScrollView>
     </View>
@@ -94,6 +134,9 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     marginBottom: 16,
   },
+  headerSmall: {
+    paddingVertical: 16,
+  },
   profileSection: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -102,6 +145,10 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
+  },
+  profileImageSmall: {
+    width: 48,
+    height: 48,
   },
   profileInfo: {
     flex: 1,
@@ -113,10 +160,16 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 4,
   },
+  profileNameSmall: {
+    fontSize: 16,
+  },
   profileEmail: {
     fontFamily: 'Inter-Regular',
     fontSize: 14,
     color: '#666',
+  },
+  profileEmailSmall: {
+    fontSize: 12,
   },
   editButton: {
     paddingVertical: 6,
@@ -125,10 +178,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#4B7BF5',
   },
+  editButtonSmall: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
   editButtonText: {
     fontFamily: 'Inter-Medium',
     fontSize: 14,
     color: '#4B7BF5',
+  },
+  editButtonTextSmall: {
+    fontSize: 12,
   },
   optionsContainer: {
     backgroundColor: '#FFF',
@@ -137,6 +197,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     overflow: 'hidden',
   },
+  optionsContainerSmall: {
+    borderRadius: 8,
+  },
   optionItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -144,6 +207,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
+  },
+  optionItemSmall: {
+    paddingVertical: 12,
   },
   lastOptionItem: {
     borderBottomWidth: 0,
@@ -157,6 +223,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
   },
+  optionIconContainerSmall: {
+    width: 32,
+    height: 32,
+  },
   optionContent: {
     flex: 1,
   },
@@ -166,10 +236,16 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 2,
   },
+  optionTitleSmall: {
+    fontSize: 14,
+  },
   optionSubtitle: {
     fontFamily: 'Inter-Regular',
     fontSize: 13,
     color: '#666',
+  },
+  optionSubtitleSmall: {
+    fontSize: 12,
   },
   dangerText: {
     color: '#EA4335',
@@ -178,9 +254,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
   },
+  versionContainerSmall: {
+    paddingVertical: 16,
+  },
   versionText: {
     fontFamily: 'Inter-Regular',
     fontSize: 14,
     color: '#999',
+  },
+  versionTextSmall: {
+    fontSize: 12,
   },
 });

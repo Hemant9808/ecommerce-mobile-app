@@ -8,7 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams();
-  const { getProductById, addToCart, isInWishlist, addToWishlist, removeFromWishlist } = useAppContext();
+  const { getProductById, addToCart, isInWishlist, addToWishlist, removeFromWishlist, isSmallDevice, isMediumDevice } = useAppContext();
   const [quantity, setQuantity] = useState(1);
   
   const product = getProductById(id as string);
@@ -53,24 +53,33 @@ export default function ProductDetailScreen() {
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Product Image */}
-          <View style={styles.imageContainer}>
+          <View style={[
+            styles.imageContainer,
+            isSmallDevice && styles.imageContainerSmall
+          ]}>
             <Image source={{ uri: product.image }} style={styles.image} />
             <LinearGradient
               colors={['rgba(0,0,0,0.7)', 'transparent']}
               style={styles.gradient}
             />
             <TouchableOpacity 
-              style={styles.backButton} 
+              style={[
+                styles.backButton,
+                isSmallDevice && styles.backButtonSmall
+              ]}
               onPress={() => router.back()}
             >
-              <ChevronLeft size={24} color="#FFF" />
+              <ChevronLeft size={isSmallDevice ? 20 : 24} color="#FFF" />
             </TouchableOpacity>
             <TouchableOpacity 
-              style={styles.favoriteButton}
+              style={[
+                styles.favoriteButton,
+                isSmallDevice && styles.favoriteButtonSmall
+              ]}
               onPress={handleToggleFavorite}
             >
               <Heart
-                size={24}
+                size={isSmallDevice ? 20 : 24}
                 color={isFavorite ? '#FF4D67' : '#FFF'}
                 fill={isFavorite ? '#FF4D67' : 'transparent'}
               />
@@ -78,34 +87,55 @@ export default function ProductDetailScreen() {
           </View>
           
           {/* Product Info */}
-          <View style={styles.infoContainer}>
-            <Text style={styles.name}>{product.name}</Text>
+          <View style={[
+            styles.infoContainer,
+            isSmallDevice && styles.infoContainerSmall
+          ]}>
+            <Text style={[
+              styles.name,
+              isSmallDevice && styles.nameSmall
+            ]}>{product.name}</Text>
             
             <View style={styles.ratingContainer}>
               <View style={styles.starsContainer}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star
                     key={star}
-                    size={16}
+                    size={isSmallDevice ? 14 : 16}
                     color="#FFB800"
                     fill={star <= Math.floor(product.rating || 0) ? '#FFB800' : 'transparent'}
                   />
                 ))}
               </View>
-              <Text style={styles.ratingText}>
+              <Text style={[
+                styles.ratingText,
+                isSmallDevice && styles.ratingTextSmall
+              ]}>
                 {product.rating} ({product.reviews} reviews)
               </Text>
             </View>
             
             <View style={styles.priceContainer}>
-              <Text style={styles.price}>${product.price.toFixed(2)}</Text>
-              <Text style={styles.soldText}>{product.sold} sold</Text>
+              <Text style={[
+                styles.price,
+                isSmallDevice && styles.priceSmall
+              ]}>${product.price.toFixed(2)}</Text>
+              <Text style={[
+                styles.soldText,
+                isSmallDevice && styles.soldTextSmall
+              ]}>{product.sold} sold</Text>
             </View>
             
             <View style={styles.divider} />
             
-            <Text style={styles.descriptionTitle}>Description</Text>
-            <Text style={styles.description}>
+            <Text style={[
+              styles.descriptionTitle,
+              isSmallDevice && styles.descriptionTitleSmall
+            ]}>Description</Text>
+            <Text style={[
+              styles.description,
+              isSmallDevice && styles.descriptionSmall
+            ]}>
               {product.description || 'No description available for this product.'}
             </Text>
             
@@ -113,20 +143,32 @@ export default function ProductDetailScreen() {
             
             {/* Quantity Selector */}
             <View style={styles.quantityContainer}>
-              <Text style={styles.quantityTitle}>Quantity</Text>
+              <Text style={[
+                styles.quantityTitle,
+                isSmallDevice && styles.quantityTitleSmall
+              ]}>Quantity</Text>
               <View style={styles.quantityControls}>
                 <TouchableOpacity 
-                  style={styles.quantityButton} 
+                  style={[
+                    styles.quantityButton,
+                    isSmallDevice && styles.quantityButtonSmall
+                  ]}
                   onPress={decreaseQuantity}
                 >
-                  <Minus size={20} color="#333" />
+                  <Minus size={isSmallDevice ? 16 : 20} color="#333" />
                 </TouchableOpacity>
-                <Text style={styles.quantityText}>{quantity}</Text>
+                <Text style={[
+                  styles.quantityText,
+                  isSmallDevice && styles.quantityTextSmall
+                ]}>{quantity}</Text>
                 <TouchableOpacity 
-                  style={styles.quantityButton} 
+                  style={[
+                    styles.quantityButton,
+                    isSmallDevice && styles.quantityButtonSmall
+                  ]}
                   onPress={increaseQuantity}
                 >
-                  <Plus size={20} color="#333" />
+                  <Plus size={isSmallDevice ? 16 : 20} color="#333" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -134,19 +176,34 @@ export default function ProductDetailScreen() {
         </ScrollView>
         
         {/* Bottom Action Bar */}
-        <View style={styles.actionBar}>
+        <View style={[
+          styles.actionBar,
+          isSmallDevice && styles.actionBarSmall
+        ]}>
           <View style={styles.totalContainer}>
-            <Text style={styles.totalLabel}>Total Price</Text>
-            <Text style={styles.totalPrice}>
+            <Text style={[
+              styles.totalLabel,
+              isSmallDevice && styles.totalLabelSmall
+            ]}>Total Price</Text>
+            <Text style={[
+              styles.totalPrice,
+              isSmallDevice && styles.totalPriceSmall
+            ]}>
               ${(product.price * quantity).toFixed(2)}
             </Text>
           </View>
           <TouchableOpacity 
-            style={styles.addToCartButton}
+            style={[
+              styles.addToCartButton,
+              isSmallDevice && styles.addToCartButtonSmall
+            ]}
             onPress={handleAddToCart}
           >
-            <ShoppingCart size={20} color="#FFF" />
-            <Text style={styles.addToCartText}>Add to Cart</Text>
+            <ShoppingCart size={isSmallDevice ? 18 : 20} color="#FFF" />
+            <Text style={[
+              styles.addToCartText,
+              isSmallDevice && styles.addToCartTextSmall
+            ]}>Add to Cart</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -178,6 +235,9 @@ const styles = StyleSheet.create({
     height: width * 0.8,
     position: 'relative',
   },
+  imageContainerSmall: {
+    height: width * 0.6,
+  },
   image: {
     width: '100%',
     height: '100%',
@@ -200,6 +260,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  backButtonSmall: {
+    top: 40,
+    left: 12,
+    width: 36,
+    height: 36,
+  },
   favoriteButton: {
     position: 'absolute',
     top: 50,
@@ -211,14 +277,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  favoriteButtonSmall: {
+    top: 40,
+    right: 12,
+    width: 36,
+    height: 36,
+  },
   infoContainer: {
     padding: 16,
+  },
+  infoContainerSmall: {
+    padding: 12,
   },
   name: {
     fontFamily: 'Inter-SemiBold',
     fontSize: 24,
     color: '#333',
     marginBottom: 8,
+  },
+  nameSmall: {
+    fontSize: 20,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -234,6 +312,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
   },
+  ratingTextSmall: {
+    fontSize: 12,
+  },
   priceContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -245,10 +326,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#333',
   },
+  priceSmall: {
+    fontSize: 20,
+  },
   soldText: {
     fontFamily: 'Inter-Regular',
     fontSize: 14,
     color: '#666',
+  },
+  soldTextSmall: {
+    fontSize: 12,
   },
   divider: {
     height: 1,
@@ -261,11 +348,18 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 8,
   },
+  descriptionTitleSmall: {
+    fontSize: 16,
+  },
   description: {
     fontFamily: 'Inter-Regular',
     fontSize: 16,
     color: '#666',
     lineHeight: 24,
+  },
+  descriptionSmall: {
+    fontSize: 14,
+    lineHeight: 20,
   },
   quantityContainer: {
     flexDirection: 'row',
@@ -276,6 +370,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Medium',
     fontSize: 16,
     color: '#333',
+  },
+  quantityTitleSmall: {
+    fontSize: 14,
   },
   quantityControls: {
     flexDirection: 'row',
@@ -289,11 +386,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  quantityButtonSmall: {
+    width: 32,
+    height: 32,
+  },
   quantityText: {
     fontFamily: 'Inter-Medium',
     fontSize: 16,
     color: '#333',
     marginHorizontal: 16,
+  },
+  quantityTextSmall: {
+    fontSize: 14,
   },
   actionBar: {
     flexDirection: 'row',
@@ -301,6 +405,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderTopWidth: 1,
     borderTopColor: '#EAEAEA',
+  },
+  actionBarSmall: {
+    padding: 12,
   },
   totalContainer: {
     flex: 1,
@@ -311,10 +418,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
   },
+  totalLabelSmall: {
+    fontSize: 10,
+  },
   totalPrice: {
     fontFamily: 'Inter-Bold',
     fontSize: 18,
     color: '#333',
+  },
+  totalPriceSmall: {
+    fontSize: 16,
   },
   addToCartButton: {
     flexDirection: 'row',
@@ -325,11 +438,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  addToCartButtonSmall: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
   addToCartText: {
     fontFamily: 'Inter-SemiBold',
     fontSize: 16,
     color: '#FFF',
     marginLeft: 8,
+  },
+  addToCartTextSmall: {
+    fontSize: 14,
   },
   backButtonText: {
     fontFamily: 'Inter-Medium',

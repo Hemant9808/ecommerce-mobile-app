@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { useAppContext } from '@/context/AppContext';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -10,7 +10,22 @@ export default function BannerCarousel() {
   const { dimensions, isSmallDevice, isMediumDevice, isLargeDevice } = useAppContext();
 
   const { width } = dimensions;
-  const ITEM_WIDTH = isSmallDevice ? width - 24 : width - 32;
+  
+  // Enhanced responsive sizing
+  const getItemWidth = () => {
+    if (isSmallDevice) return width - 32;
+    if (isMediumDevice) return width - 40;
+    return Math.min(width - 48, 800); // Max width for large screens
+  };
+
+  const getItemHeight = () => {
+    if (isSmallDevice) return 160;
+    if (isMediumDevice) return 200;
+    return 240;
+  };
+
+  const ITEM_WIDTH = getItemWidth();
+  const ITEM_HEIGHT = getItemHeight();
 
   const banners = [
     {
@@ -20,16 +35,18 @@ export default function BannerCarousel() {
       discount: '70% OFF',
       note: 'ON ALL MODELS',
       ctaText: 'BUY NOW',
-      image: 'https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg'
+      image: 'https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg',
+      colors: ['rgba(139,69,19,0.8)', 'rgba(160,82,45,0.6)', 'transparent']
     },
     {
       id: '2',
-      title: 'Summer',
+      title: 'Summer Collection',
       subtitle: 'FLASH SALE',
       discount: '50% OFF',
       note: 'LIMITED TIME ONLY',
       ctaText: 'SHOP NOW',
-      image: 'https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg'
+      image: 'https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg',
+      colors: ['rgba(25,25,112,0.8)', 'rgba(70,130,180,0.6)', 'transparent']
     },
     {
       id: '3',
@@ -38,18 +55,38 @@ export default function BannerCarousel() {
       discount: '60% OFF',
       note: 'WHILE SUPPLIES LAST',
       ctaText: 'GET DEALS',
-      image: 'https://images.pexels.com/photos/1027130/pexels-photo-1027130.jpeg'
+      image: 'https://images.pexels.com/photos/1027130/pexels-photo-1027130.jpeg',
+      colors: ['rgba(128,0,128,0.8)', 'rgba(147,112,219,0.6)', 'transparent']
     }
   ];
 
   const handleScroll = (event: any) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
-    const index = Math.round(scrollPosition / ITEM_WIDTH);
-    setActiveIndex(index);
+    const currentIndex = Math.round(scrollPosition / (ITEM_WIDTH + 16));
+    setActiveIndex(Math.max(0, Math.min(currentIndex, banners.length - 1)));
   };
 
   const handleBannerPress = (bannerId: string) => {
     router.push('/(tabs)/products');
+  };
+
+  // Auto scroll functionality
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextIndex = (activeIndex + 1) % banners.length;
+      scrollViewRef.current?.scrollTo({
+        x: nextIndex * (ITEM_WIDTH + 16),
+        animated: true,
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [activeIndex, ITEM_WIDTH]);
+
+  const getPadding = () => {
+    if (isSmallDevice) return 16;
+    if (isMediumDevice) return 20;
+    return 24;
   };
 
   return (
@@ -62,65 +99,78 @@ export default function BannerCarousel() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         decelerationRate="fast"
-        snapToInterval={ITEM_WIDTH + 8}
-        contentContainerStyle={[
-          styles.scrollContent,
-          isSmallDevice && styles.scrollContentSmall
-        ]}
+        snapToInterval={ITEM_WIDTH + 16}
+        contentContainerStyle={{
+          paddingHorizontal: getPadding(),
+        }}
       >
         {banners.map((banner, index) => (
           <TouchableOpacity
             key={banner.id}
             style={[
               styles.bannerItem,
-              { width: ITEM_WIDTH },
-              isSmallDevice && styles.bannerItemSmall
+              { 
+                width: ITEM_WIDTH,
+                height: ITEM_HEIGHT,
+                marginRight: index < banners.length - 1 ? 16 : 0,
+              }
             ]}
             onPress={() => handleBannerPress(banner.id)}
-            activeOpacity={0.9}
+            activeOpacity={0.95}
           >
-            <Image source={{ uri: banner.image }} style={styles.bannerImage} />
+            <Image 
+              source={{ uri: banner.image }} 
+              style={styles.bannerImage}
+              resizeMode="cover"
+            />
             <LinearGradient
-              colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.3)', 'transparent']}
+              colors={banner.colors as any}
               style={styles.bannerGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
             />
             <View style={[
               styles.bannerContent,
-              isSmallDevice && styles.bannerContentSmall
+              { padding: isSmallDevice ? 16 : isLargeDevice ? 24 : 20 }
             ]}>
               <Text style={[
                 styles.bannerTitle,
-                isSmallDevice && styles.bannerTitleSmall
+                { fontSize: isSmallDevice ? 12 : isLargeDevice ? 16 : 14 }
               ]}>
                 {banner.title}
               </Text>
               <Text style={[
                 styles.bannerSubtitle,
-                isSmallDevice && styles.bannerSubtitleSmall
+                { fontSize: isSmallDevice ? 20 : isLargeDevice ? 28 : 24 }
               ]}>
                 {banner.subtitle}
               </Text>
               <Text style={[
                 styles.discountText,
-                isSmallDevice && styles.discountTextSmall
+                { fontSize: isSmallDevice ? 16 : isLargeDevice ? 22 : 18 }
               ]}>
                 {banner.discount}
               </Text>
               <Text style={[
                 styles.noteText,
-                isSmallDevice && styles.noteTextSmall
+                { fontSize: isSmallDevice ? 10 : isLargeDevice ? 14 : 12 }
               ]}>
                 {banner.note}
               </Text>
               <TouchableOpacity
                 style={[
                   styles.ctaButton,
-                  isSmallDevice && styles.ctaButtonSmall
+                  {
+                    paddingVertical: isSmallDevice ? 8 : isLargeDevice ? 12 : 10,
+                    paddingHorizontal: isSmallDevice ? 16 : isLargeDevice ? 24 : 20,
+                    borderRadius: isSmallDevice ? 20 : 24,
+                  }
                 ]}
+                onPress={() => handleBannerPress(banner.id)}
               >
                 <Text style={[
                   styles.ctaButtonText,
-                  isSmallDevice && styles.ctaButtonTextSmall
+                  { fontSize: isSmallDevice ? 10 : isLargeDevice ? 14 : 12 }
                 ]}>
                   {banner.ctaText}
                 </Text>
@@ -130,16 +180,29 @@ export default function BannerCarousel() {
         ))}
       </ScrollView>
 
-      <View style={styles.paginationContainer}>
+      <View style={[
+        styles.paginationContainer,
+        { marginTop: isSmallDevice ? 12 : isLargeDevice ? 20 : 16 }
+      ]}>
         {banners.map((_, index) => (
-          <View
+          <TouchableOpacity
             key={index}
             style={[
               styles.paginationDot,
-              index === activeIndex && styles.paginationDotActive,
-              isSmallDevice && styles.paginationDotSmall,
-              isSmallDevice && index === activeIndex && styles.paginationDotActiveSmall
+              {
+                width: index === activeIndex ? (isSmallDevice ? 16 : 20) : (isSmallDevice ? 6 : 8),
+                height: isSmallDevice ? 6 : 8,
+                borderRadius: isSmallDevice ? 3 : 4,
+                marginHorizontal: isSmallDevice ? 3 : 4,
+                backgroundColor: index === activeIndex ? '#4B7BF5' : '#E0E0E0',
+              }
             ]}
+            onPress={() => {
+              scrollViewRef.current?.scrollTo({
+                x: index * (ITEM_WIDTH + 16),
+                animated: true,
+              });
+            }}
           />
         ))}
       </View>
@@ -151,25 +214,23 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
   },
-  scrollContent: {
-    paddingHorizontal: 16,
-  },
-  scrollContentSmall: {
-    paddingHorizontal: 12,
-  },
   bannerItem: {
-    height: 180,
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
-    marginRight: 8,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  bannerItemSmall: {
-    height: 150,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
   },
   bannerImage: {
     position: 'absolute',
@@ -185,99 +246,70 @@ const styles = StyleSheet.create({
   },
   bannerContent: {
     flex: 1,
-    padding: 16,
     justifyContent: 'center',
-  },
-  bannerContentSmall: {
-    padding: 12,
+    alignItems: 'flex-start',
   },
   bannerTitle: {
-    fontFamily: 'Inter-SemiBold',
-    fontSize: 14,
+    fontFamily: 'Inter-Medium',
     color: '#FFF',
     marginBottom: 4,
-  },
-  bannerTitleSmall: {
-    fontSize: 12,
-    marginBottom: 2,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   bannerSubtitle: {
     fontFamily: 'Inter-Bold',
-    fontSize: 24,
     color: '#FFF',
     marginBottom: 4,
-  },
-  bannerSubtitleSmall: {
-    fontSize: 20,
-    marginBottom: 2,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   discountText: {
     fontFamily: 'Inter-Bold',
-    fontSize: 18,
-    color: '#FFF',
+    color: '#FFDE00',
     marginBottom: 2,
-  },
-  discountTextSmall: {
-    fontSize: 16,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   noteText: {
     fontFamily: 'Inter-Regular',
-    fontSize: 12,
-    color: '#FFF',
-    marginBottom: 12,
-  },
-  noteTextSmall: {
-    fontSize: 10,
-    marginBottom: 8,
+    color: 'rgba(255, 255, 255, 0.9)',
+    marginBottom: 16,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   ctaButton: {
     backgroundColor: '#FFDE00',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 24,
     alignSelf: 'flex-start',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
-  ctaButtonSmall: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   ctaButtonText: {
     fontFamily: 'Inter-Bold',
-    fontSize: 12,
     color: '#000',
-  },
-  ctaButtonTextSmall: {
-    fontSize: 10,
+    textAlign: 'center',
   },
   paginationContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 16,
+    alignItems: 'center',
   },
   paginationDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#CCCCCC',
-    marginHorizontal: 4,
-  },
-  paginationDotSmall: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginHorizontal: 3,
-  },
-  paginationDotActive: {
-    backgroundColor: '#4B7BF5',
-    width: 16,
-  },
-  paginationDotActiveSmall: {
-    width: 12,
+    backgroundColor: '#E0E0E0',
   },
 });

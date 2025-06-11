@@ -8,7 +8,7 @@ type PaymentMethod = 'credit_card' | 'paypal' | 'apple_pay';
 type DeliveryMethod = 'standard' | 'express' | 'same_day';
 
 export default function CheckoutScreen() {
-  const { cartItems, cartTotal } = useAppContext();
+  const { cartItems, cartTotal, isSmallDevice, isMediumDevice } = useAppContext();
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('credit_card');
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('standard');
   const [address, setAddress] = useState({
@@ -51,26 +51,44 @@ export default function CheckoutScreen() {
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Shipping Address */}
-          <View style={styles.section}>
+          <View style={[
+            styles.section,
+            isSmallDevice && styles.sectionSmall
+          ]}>
             <View style={styles.sectionHeader}>
-              <MapPin size={20} color="#4B7BF5" />
-              <Text style={styles.sectionTitle}>Shipping Address</Text>
+              <MapPin size={isSmallDevice ? 18 : 20} color="#4B7BF5" />
+              <Text style={[
+                styles.sectionTitle,
+                isSmallDevice && styles.sectionTitleSmall
+              ]}>Shipping Address</Text>
             </View>
             
             <View style={styles.addressForm}>
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Full Name</Text>
+                <Text style={[
+                  styles.inputLabel,
+                  isSmallDevice && styles.inputLabelSmall
+                ]}>Full Name</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    isSmallDevice && styles.inputSmall
+                  ]}
                   value={address.fullName}
                   onChangeText={(text) => setAddress({ ...address, fullName: text })}
                 />
               </View>
               
               <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>Street Address</Text>
+                <Text style={[
+                  styles.inputLabel,
+                  isSmallDevice && styles.inputLabelSmall
+                ]}>Street Address</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    isSmallDevice && styles.inputSmall
+                  ]}
                   value={address.street}
                   onChangeText={(text) => setAddress({ ...address, street: text })}
                 />
@@ -78,18 +96,30 @@ export default function CheckoutScreen() {
               
               <View style={styles.inputRow}>
                 <View style={[styles.inputGroup, { flex: 1, marginRight: 8 }]}>
-                  <Text style={styles.inputLabel}>City</Text>
+                  <Text style={[
+                    styles.inputLabel,
+                    isSmallDevice && styles.inputLabelSmall
+                  ]}>City</Text>
                   <TextInput
-                    style={styles.input}
+                    style={[
+                      styles.input,
+                      isSmallDevice && styles.inputSmall
+                    ]}
                     value={address.city}
                     onChangeText={(text) => setAddress({ ...address, city: text })}
                   />
                 </View>
                 
                 <View style={[styles.inputGroup, { width: 80 }]}>
-                  <Text style={styles.inputLabel}>State</Text>
+                  <Text style={[
+                    styles.inputLabel,
+                    isSmallDevice && styles.inputLabelSmall
+                  ]}>State</Text>
                   <TextInput
-                    style={styles.input}
+                    style={[
+                      styles.input,
+                      isSmallDevice && styles.inputSmall
+                    ]}
                     value={address.state}
                     onChangeText={(text) => setAddress({ ...address, state: text })}
                   />
@@ -98,19 +128,30 @@ export default function CheckoutScreen() {
               
               <View style={styles.inputRow}>
                 <View style={[styles.inputGroup, { width: 120 }]}>
-                  <Text style={styles.inputLabel}>Zip Code</Text>
+                  <Text style={[
+                    styles.inputLabel,
+                    isSmallDevice && styles.inputLabelSmall
+                  ]}>Zip Code</Text>
                   <TextInput
-                    style={styles.input}
+                    style={[
+                      styles.input,
+                      isSmallDevice && styles.inputSmall
+                    ]}
                     value={address.zipCode}
                     onChangeText={(text) => setAddress({ ...address, zipCode: text })}
-                    keyboardType="numeric"
                   />
                 </View>
                 
                 <View style={[styles.inputGroup, { flex: 1, marginLeft: 8 }]}>
-                  <Text style={styles.inputLabel}>Country</Text>
+                  <Text style={[
+                    styles.inputLabel,
+                    isSmallDevice && styles.inputLabelSmall
+                  ]}>Country</Text>
                   <TextInput
-                    style={styles.input}
+                    style={[
+                      styles.input,
+                      isSmallDevice && styles.inputSmall
+                    ]}
                     value={address.country}
                     onChangeText={(text) => setAddress({ ...address, country: text })}
                   />
@@ -120,27 +161,43 @@ export default function CheckoutScreen() {
           </View>
           
           {/* Payment Method */}
-          <View style={styles.section}>
+          <View style={[
+            styles.section,
+            isSmallDevice && styles.sectionSmall
+          ]}>
             <View style={styles.sectionHeader}>
-              <CreditCard size={20} color="#4B7BF5" />
-              <Text style={styles.sectionTitle}>Payment Method</Text>
+              <CreditCard size={isSmallDevice ? 18 : 20} color="#4B7BF5" />
+              <Text style={[
+                styles.sectionTitle,
+                isSmallDevice && styles.sectionTitleSmall
+              ]}>Payment Method</Text>
             </View>
             
             <View style={styles.optionsContainer}>
               <TouchableOpacity
                 style={[
                   styles.optionCard,
+                  isSmallDevice && styles.optionCardSmall,
                   paymentMethod === 'credit_card' && styles.selectedOption,
                 ]}
                 onPress={() => setPaymentMethod('credit_card')}
               >
                 <View style={styles.optionContent}>
-                  <Text style={styles.optionTitle}>Credit Card</Text>
-                  <Text style={styles.optionSubtitle}>Visa, Mastercard, Amex</Text>
+                  <Text style={[
+                    styles.optionTitle,
+                    isSmallDevice && styles.optionTitleSmall
+                  ]}>Credit Card</Text>
+                  <Text style={[
+                    styles.optionSubtitle,
+                    isSmallDevice && styles.optionSubtitleSmall
+                  ]}>Visa, Mastercard, Amex</Text>
                 </View>
                 {paymentMethod === 'credit_card' && (
-                  <View style={styles.checkmark}>
-                    <Check size={16} color="#FFF" />
+                  <View style={[
+                    styles.checkmark,
+                    isSmallDevice && styles.checkmarkSmall
+                  ]}>
+                    <Check size={isSmallDevice ? 14 : 16} color="#FFF" />
                   </View>
                 )}
               </TouchableOpacity>
@@ -148,17 +205,27 @@ export default function CheckoutScreen() {
               <TouchableOpacity
                 style={[
                   styles.optionCard,
+                  isSmallDevice && styles.optionCardSmall,
                   paymentMethod === 'paypal' && styles.selectedOption,
                 ]}
                 onPress={() => setPaymentMethod('paypal')}
               >
                 <View style={styles.optionContent}>
-                  <Text style={styles.optionTitle}>PayPal</Text>
-                  <Text style={styles.optionSubtitle}>Pay with your PayPal account</Text>
+                  <Text style={[
+                    styles.optionTitle,
+                    isSmallDevice && styles.optionTitleSmall
+                  ]}>PayPal</Text>
+                  <Text style={[
+                    styles.optionSubtitle,
+                    isSmallDevice && styles.optionSubtitleSmall
+                  ]}>Pay with your PayPal account</Text>
                 </View>
                 {paymentMethod === 'paypal' && (
-                  <View style={styles.checkmark}>
-                    <Check size={16} color="#FFF" />
+                  <View style={[
+                    styles.checkmark,
+                    isSmallDevice && styles.checkmarkSmall
+                  ]}>
+                    <Check size={isSmallDevice ? 14 : 16} color="#FFF" />
                   </View>
                 )}
               </TouchableOpacity>
@@ -166,17 +233,27 @@ export default function CheckoutScreen() {
               <TouchableOpacity
                 style={[
                   styles.optionCard,
+                  isSmallDevice && styles.optionCardSmall,
                   paymentMethod === 'apple_pay' && styles.selectedOption,
                 ]}
                 onPress={() => setPaymentMethod('apple_pay')}
               >
                 <View style={styles.optionContent}>
-                  <Text style={styles.optionTitle}>Apple Pay</Text>
-                  <Text style={styles.optionSubtitle}>Pay with Apple Pay</Text>
+                  <Text style={[
+                    styles.optionTitle,
+                    isSmallDevice && styles.optionTitleSmall
+                  ]}>Apple Pay</Text>
+                  <Text style={[
+                    styles.optionSubtitle,
+                    isSmallDevice && styles.optionSubtitleSmall
+                  ]}>Pay with Apple Pay</Text>
                 </View>
                 {paymentMethod === 'apple_pay' && (
-                  <View style={styles.checkmark}>
-                    <Check size={16} color="#FFF" />
+                  <View style={[
+                    styles.checkmark,
+                    isSmallDevice && styles.checkmarkSmall
+                  ]}>
+                    <Check size={isSmallDevice ? 14 : 16} color="#FFF" />
                   </View>
                 )}
               </TouchableOpacity>
@@ -184,28 +261,47 @@ export default function CheckoutScreen() {
           </View>
           
           {/* Delivery Method */}
-          <View style={styles.section}>
+          <View style={[
+            styles.section,
+            isSmallDevice && styles.sectionSmall
+          ]}>
             <View style={styles.sectionHeader}>
-              <Truck size={20} color="#4B7BF5" />
-              <Text style={styles.sectionTitle}>Delivery Method</Text>
+              <Truck size={isSmallDevice ? 18 : 20} color="#4B7BF5" />
+              <Text style={[
+                styles.sectionTitle,
+                isSmallDevice && styles.sectionTitleSmall
+              ]}>Delivery Method</Text>
             </View>
             
             <View style={styles.optionsContainer}>
               <TouchableOpacity
                 style={[
                   styles.optionCard,
+                  isSmallDevice && styles.optionCardSmall,
                   deliveryMethod === 'standard' && styles.selectedOption,
                 ]}
                 onPress={() => setDeliveryMethod('standard')}
               >
                 <View style={styles.optionContent}>
-                  <Text style={styles.optionTitle}>Standard Delivery</Text>
-                  <Text style={styles.optionSubtitle}>3-5 business days</Text>
+                  <Text style={[
+                    styles.optionTitle,
+                    isSmallDevice && styles.optionTitleSmall
+                  ]}>Standard Delivery</Text>
+                  <Text style={[
+                    styles.optionSubtitle,
+                    isSmallDevice && styles.optionSubtitleSmall
+                  ]}>3-5 business days</Text>
                 </View>
-                <Text style={styles.optionPrice}>$5.00</Text>
+                <Text style={[
+                  styles.optionPrice,
+                  isSmallDevice && styles.optionPriceSmall
+                ]}>$5.00</Text>
                 {deliveryMethod === 'standard' && (
-                  <View style={styles.checkmark}>
-                    <Check size={16} color="#FFF" />
+                  <View style={[
+                    styles.checkmark,
+                    isSmallDevice && styles.checkmarkSmall
+                  ]}>
+                    <Check size={isSmallDevice ? 14 : 16} color="#FFF" />
                   </View>
                 )}
               </TouchableOpacity>
@@ -213,18 +309,31 @@ export default function CheckoutScreen() {
               <TouchableOpacity
                 style={[
                   styles.optionCard,
+                  isSmallDevice && styles.optionCardSmall,
                   deliveryMethod === 'express' && styles.selectedOption,
                 ]}
                 onPress={() => setDeliveryMethod('express')}
               >
                 <View style={styles.optionContent}>
-                  <Text style={styles.optionTitle}>Express Delivery</Text>
-                  <Text style={styles.optionSubtitle}>1-2 business days</Text>
+                  <Text style={[
+                    styles.optionTitle,
+                    isSmallDevice && styles.optionTitleSmall
+                  ]}>Express Delivery</Text>
+                  <Text style={[
+                    styles.optionSubtitle,
+                    isSmallDevice && styles.optionSubtitleSmall
+                  ]}>1-2 business days</Text>
                 </View>
-                <Text style={styles.optionPrice}>$15.00</Text>
+                <Text style={[
+                  styles.optionPrice,
+                  isSmallDevice && styles.optionPriceSmall
+                ]}>$15.00</Text>
                 {deliveryMethod === 'express' && (
-                  <View style={styles.checkmark}>
-                    <Check size={16} color="#FFF" />
+                  <View style={[
+                    styles.checkmark,
+                    isSmallDevice && styles.checkmarkSmall
+                  ]}>
+                    <Check size={isSmallDevice ? 14 : 16} color="#FFF" />
                   </View>
                 )}
               </TouchableOpacity>
@@ -232,18 +341,31 @@ export default function CheckoutScreen() {
               <TouchableOpacity
                 style={[
                   styles.optionCard,
+                  isSmallDevice && styles.optionCardSmall,
                   deliveryMethod === 'same_day' && styles.selectedOption,
                 ]}
                 onPress={() => setDeliveryMethod('same_day')}
               >
                 <View style={styles.optionContent}>
-                  <Text style={styles.optionTitle}>Same Day Delivery</Text>
-                  <Text style={styles.optionSubtitle}>Available in select areas</Text>
+                  <Text style={[
+                    styles.optionTitle,
+                    isSmallDevice && styles.optionTitleSmall
+                  ]}>Same Day Delivery</Text>
+                  <Text style={[
+                    styles.optionSubtitle,
+                    isSmallDevice && styles.optionSubtitleSmall
+                  ]}>Within 24 hours</Text>
                 </View>
-                <Text style={styles.optionPrice}>$25.00</Text>
+                <Text style={[
+                  styles.optionPrice,
+                  isSmallDevice && styles.optionPriceSmall
+                ]}>$25.00</Text>
                 {deliveryMethod === 'same_day' && (
-                  <View style={styles.checkmark}>
-                    <Check size={16} color="#FFF" />
+                  <View style={[
+                    styles.checkmark,
+                    isSmallDevice && styles.checkmarkSmall
+                  ]}>
+                    <Check size={isSmallDevice ? 14 : 16} color="#FFF" />
                   </View>
                 )}
               </TouchableOpacity>
@@ -251,29 +373,65 @@ export default function CheckoutScreen() {
           </View>
           
           {/* Order Summary */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Order Summary</Text>
+          <View style={[
+            styles.section,
+            isSmallDevice && styles.sectionSmall
+          ]}>
+            <Text style={[
+              styles.sectionTitle,
+              isSmallDevice && styles.sectionTitleSmall
+            ]}>Order Summary</Text>
             
             <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Subtotal</Text>
-              <Text style={styles.summaryValue}>${cartTotal.toFixed(2)}</Text>
+              <Text style={[
+                styles.summaryLabel,
+                isSmallDevice && styles.summaryLabelSmall
+              ]}>Subtotal</Text>
+              <Text style={[
+                styles.summaryValue,
+                isSmallDevice && styles.summaryValueSmall
+              ]}>${cartTotal.toFixed(2)}</Text>
             </View>
             
             <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Shipping</Text>
-              <Text style={styles.summaryValue}>${deliveryFee.toFixed(2)}</Text>
+              <Text style={[
+                styles.summaryLabel,
+                isSmallDevice && styles.summaryLabelSmall
+              ]}>Shipping</Text>
+              <Text style={[
+                styles.summaryValue,
+                isSmallDevice && styles.summaryValueSmall
+              ]}>${deliveryFee.toFixed(2)}</Text>
             </View>
             
             <View style={[styles.summaryRow, styles.totalRow]}>
-              <Text style={styles.totalLabel}>Total</Text>
-              <Text style={styles.totalValue}>${totalAmount.toFixed(2)}</Text>
+              <Text style={[
+                styles.totalLabel,
+                isSmallDevice && styles.totalLabelSmall
+              ]}>Total</Text>
+              <Text style={[
+                styles.totalValue,
+                isSmallDevice && styles.totalValueSmall
+              ]}>${totalAmount.toFixed(2)}</Text>
             </View>
           </View>
         </ScrollView>
         
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.placeOrderButton} onPress={handlePlaceOrder}>
-            <Text style={styles.placeOrderButtonText}>Place Order</Text>
+        <View style={[
+          styles.footer,
+          isSmallDevice && styles.footerSmall
+        ]}>
+          <TouchableOpacity 
+            style={[
+              styles.placeOrderButton,
+              isSmallDevice && styles.placeOrderButtonSmall
+            ]} 
+            onPress={handlePlaceOrder}
+          >
+            <Text style={[
+              styles.placeOrderButtonText,
+              isSmallDevice && styles.placeOrderButtonTextSmall
+            ]}>Place Order</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -293,6 +451,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
   },
+  sectionSmall: {
+    padding: 12,
+    marginHorizontal: 12,
+    marginBottom: 12,
+  },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -303,6 +466,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#333',
     marginLeft: 8,
+  },
+  sectionTitleSmall: {
+    fontSize: 16,
+    marginLeft: 6,
   },
   addressForm: {
     marginTop: 8,
@@ -316,6 +483,10 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 8,
   },
+  inputLabelSmall: {
+    fontSize: 12,
+    marginBottom: 6,
+  },
   input: {
     backgroundColor: '#F5F5F7',
     borderRadius: 8,
@@ -324,6 +495,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     fontSize: 16,
     color: '#333',
+  },
+  inputSmall: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontSize: 14,
   },
   inputRow: {
     flexDirection: 'row',
@@ -342,6 +518,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'transparent',
   },
+  optionCardSmall: {
+    padding: 12,
+    marginBottom: 10,
+  },
   selectedOption: {
     borderColor: '#4B7BF5',
   },
@@ -354,16 +534,27 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 4,
   },
+  optionTitleSmall: {
+    fontSize: 14,
+    marginBottom: 2,
+  },
   optionSubtitle: {
     fontFamily: 'Inter-Regular',
     fontSize: 14,
     color: '#666',
+  },
+  optionSubtitleSmall: {
+    fontSize: 12,
   },
   optionPrice: {
     fontFamily: 'Inter-SemiBold',
     fontSize: 16,
     color: '#333',
     marginRight: 16,
+  },
+  optionPriceSmall: {
+    fontSize: 14,
+    marginRight: 12,
   },
   checkmark: {
     width: 24,
@@ -372,6 +563,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#4B7BF5',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  checkmarkSmall: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
   },
   summaryRow: {
     flexDirection: 'row',
@@ -383,10 +579,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
+  summaryLabelSmall: {
+    fontSize: 14,
+  },
   summaryValue: {
     fontFamily: 'Inter-Medium',
     fontSize: 16,
     color: '#333',
+  },
+  summaryValueSmall: {
+    fontSize: 14,
   },
   totalRow: {
     marginTop: 8,
@@ -399,10 +601,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#333',
   },
+  totalLabelSmall: {
+    fontSize: 16,
+  },
   totalValue: {
     fontFamily: 'Inter-Bold',
     fontSize: 20,
     color: '#333',
+  },
+  totalValueSmall: {
+    fontSize: 18,
   },
   footer: {
     backgroundColor: '#FFF',
@@ -410,15 +618,24 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#EAEAEA',
   },
+  footerSmall: {
+    padding: 12,
+  },
   placeOrderButton: {
     backgroundColor: '#4B7BF5',
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
   },
+  placeOrderButtonSmall: {
+    paddingVertical: 12,
+  },
   placeOrderButtonText: {
     fontFamily: 'Inter-SemiBold',
     fontSize: 18,
     color: '#FFF',
+  },
+  placeOrderButtonTextSmall: {
+    fontSize: 16,
   },
 });
