@@ -71,6 +71,7 @@ export default function CartItem({ item }: CartItemProps) {
             borderRadius: isSmallDevice ? 6 : 8,
           }
         ]}
+        resizeMode="cover"
       />
 
       <View style={[
@@ -206,7 +207,6 @@ const styles = StyleSheet.create({
     }),
   },
   image: {
-    resizeMode: 'cover',
   },
   contentContainer: {
     flex: 1,

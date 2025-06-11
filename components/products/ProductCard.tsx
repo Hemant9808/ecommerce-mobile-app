@@ -84,7 +84,7 @@ export default function ProductCard({
         activeOpacity={0.9}
       >
         <View style={[styles.listImageContainer, { height: imageHeight, width: imageHeight }]}>
-          <Image source={{ uri: product.image }} style={styles.image} />
+          <Image source={{ uri: product.image }} style={styles.image} resizeMode="cover" />
           <TouchableOpacity
             style={[
               styles.favoriteButton,
@@ -162,7 +162,7 @@ export default function ProductCard({
       activeOpacity={0.9}
     >
       <View style={[styles.gridImageContainer, { height: imageHeight }]}>
-        <Image source={{ uri: product.image }} style={styles.image} />
+        <Image source={{ uri: product.image }} style={styles.image} resizeMode="cover" />
         <TouchableOpacity
           style={[
             styles.favoriteButton,
@@ -384,7 +384,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
   },
   favoriteButton: {
     position: 'absolute',

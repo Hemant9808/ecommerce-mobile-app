@@ -170,7 +170,7 @@ export default function FlashSellSection() {
               styles.productImageContainer,
               { height: isSmallDevice ? cardHeight * 0.55 : cardHeight * 0.6 }
             ]}>
-              <Image source={{ uri: product.image }} style={styles.productImage} />
+              <Image source={{ uri: product.image }} style={styles.productImage} resizeMode="cover" />
               <TouchableOpacity
                 onPress={() => toggleFavorite(product.id)}
                 style={[
@@ -357,7 +357,6 @@ const styles = StyleSheet.create({
   productImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
   },
   favoriteButton: {
     position: 'absolute',

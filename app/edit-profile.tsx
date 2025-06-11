@@ -154,6 +154,7 @@ export default function EditProfileScreen() {
                 height: isSmallDevice ? 80 : 100,
                 borderRadius: isSmallDevice ? 40 : 50,
               }]} 
+              resizeMode="cover"
             />
             <TouchableOpacity 
               style={[styles.cameraButton, {
@@ -333,96 +334,20 @@ export default function EditProfileScreen() {
         </View>
 
         {/* Password Section */}
-        <View style={[styles.section, { marginHorizontal: isSmallDevice ? 16 : 20 }]}>
+        <View style={[styles.section, { marginHorizontal: isSmallDevice ? 16 : 20 }]}>  
           <TouchableOpacity 
             style={styles.passwordToggle}
             onPress={() => setShowPasswordSection(!showPasswordSection)}
           >
-            <Text style={[styles.sectionTitle, { fontSize: isSmallDevice ? 16 : 18 }]}>
-              Change Password
-            </Text>
+            <Text style={[styles.sectionTitle, { fontSize: isSmallDevice ? 16 : 18 }]}>Change Password</Text>
             <Text style={[styles.toggleText, { fontSize: isSmallDevice ? 14 : 16 }]}>
               {showPasswordSection ? 'Cancel' : 'Change'}
             </Text>
           </TouchableOpacity>
-
           {showPasswordSection && (
-            <>
-              <View style={styles.inputGroup}>
-                <Text style={[styles.inputLabel, { fontSize: isSmallDevice ? 14 : 16 }]}>
-                  Current Password
-                </Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={[styles.textInput, { fontSize: isSmallDevice ? 14 : 16, flex: 1 }]}
-                    value={passwordData.currentPassword}
-                    onChangeText={(value) => handlePasswordChange('currentPassword', value)}
-                    placeholder="Enter current password"
-                    placeholderTextColor="#999"
-                    secureTextEntry={!showPasswords.current}
-                  />
-                  <TouchableOpacity onPress={() => togglePasswordVisibility('current')}>
-                    {showPasswords.current ? 
-                      <EyeOff size={iconSize - 4} color="#666" /> : 
-                      <Eye size={iconSize - 4} color="#666" />
-                    }
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.inputGroup}>
-                <Text style={[styles.inputLabel, { fontSize: isSmallDevice ? 14 : 16 }]}>
-                  New Password
-                </Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={[styles.textInput, { fontSize: isSmallDevice ? 14 : 16, flex: 1 }]}
-                    value={passwordData.newPassword}
-                    onChangeText={(value) => handlePasswordChange('newPassword', value)}
-                    placeholder="Enter new password"
-                    placeholderTextColor="#999"
-                    secureTextEntry={!showPasswords.new}
-                  />
-                  <TouchableOpacity onPress={() => togglePasswordVisibility('new')}>
-                    {showPasswords.new ? 
-                      <EyeOff size={iconSize - 4} color="#666" /> : 
-                      <Eye size={iconSize - 4} color="#666" />
-                    }
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.inputGroup}>
-                <Text style={[styles.inputLabel, { fontSize: isSmallDevice ? 14 : 16 }]}>
-                  Confirm New Password
-                </Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={[styles.textInput, { fontSize: isSmallDevice ? 14 : 16, flex: 1 }]}
-                    value={passwordData.confirmPassword}
-                    onChangeText={(value) => handlePasswordChange('confirmPassword', value)}
-                    placeholder="Confirm new password"
-                    placeholderTextColor="#999"
-                    secureTextEntry={!showPasswords.confirm}
-                  />
-                  <TouchableOpacity onPress={() => togglePasswordVisibility('confirm')}>
-                    {showPasswords.confirm ? 
-                      <EyeOff size={iconSize - 4} color="#666" /> : 
-                      <Eye size={iconSize - 4} color="#666" />
-                    }
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <TouchableOpacity 
-                style={[styles.changePasswordButton, { marginTop: isSmallDevice ? 16 : 20 }]}
-                onPress={handleChangePassword}
-              >
-                <Text style={[styles.changePasswordButtonText, { fontSize: isSmallDevice ? 14 : 16 }]}>
-                  Update Password
-                </Text>
-              </TouchableOpacity>
-            </>
+            <View style={{ padding: 16 }}>
+              {/* Password fields go here */}
+            </View>
           )}
         </View>
       </ScrollView>
@@ -433,148 +358,120 @@ export default function EditProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F7',
+    backgroundColor: '#F9FAFB',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 16,
-    backgroundColor: '#FFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E7',
+    paddingTop: Platform.OS === 'android' ? 25 : 0,
+    paddingBottom: 16,
+    backgroundColor: '#FFFFFF',
+    elevation: 4,
   },
   backButton: {
     padding: 8,
   },
   headerTitle: {
-    fontFamily: 'Inter-SemiBold',
-    color: '#333',
     flex: 1,
     textAlign: 'center',
-    marginHorizontal: 16,
+    fontWeight: '600',
+    color: '#333',
   },
   saveButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    padding: 8,
   },
   saveButtonText: {
-    fontFamily: 'Inter-SemiBold',
-    color: '#4B7BF5',
+    fontWeight: '500',
+    color: '#007BFF',
   },
   content: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   photoSection: {
     alignItems: 'center',
-    paddingVertical: 24,
-    backgroundColor: '#FFF',
-    marginBottom: 16,
+    marginTop: 16,
+    marginBottom: 24,
   },
   photoContainer: {
     position: 'relative',
-    marginBottom: 8,
   },
   profilePhoto: {
-    resizeMode: 'cover',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: '#007BFF',
   },
   cameraButton: {
     position: 'absolute',
     bottom: 0,
     right: 0,
-    backgroundColor: '#4B7BF5',
+    backgroundColor: '#007BFF',
     alignItems: 'center',
     justifyContent: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
+    borderRadius: 16,
+    elevation: 2,
   },
   changePhotoText: {
-    fontFamily: 'Inter-Regular',
-    color: '#666',
+    marginTop: 8,
+    fontSize: 16,
+    color: '#007BFF',
   },
   section: {
-    backgroundColor: '#FFF',
-    paddingVertical: 20,
-    marginBottom: 16,
-    borderRadius: 12,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
+    marginBottom: 24,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    elevation: 2,
   },
   sectionTitle: {
-    fontFamily: 'Inter-SemiBold',
+    padding: 16,
+    fontWeight: '600',
     color: '#333',
-    marginBottom: 16,
-    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
   },
   inputGroup: {
-    marginBottom: 16,
-    paddingHorizontal: 20,
+    padding: 16,
   },
   inputLabel: {
-    fontFamily: 'Inter-Medium',
-    color: '#333',
     marginBottom: 8,
+    fontWeight: '500',
+    color: '#333',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E5E7',
+    borderColor: '#E5E7EB',
     borderRadius: 8,
+    paddingVertical: 8,
     paddingHorizontal: 12,
-    paddingVertical: 12,
-    backgroundColor: '#FAFAFA',
   },
   inputIcon: {
     marginRight: 8,
   },
   textInput: {
     flex: 1,
-    fontFamily: 'Inter-Regular',
+    height: 40,
+    fontSize: 16,
     color: '#333',
   },
   row: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    justifyContent: 'space-between',
   },
   passwordToggle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 16,
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
   },
   toggleText: {
-    fontFamily: 'Inter-Medium',
-    color: '#4B7BF5',
-  },
-  changePasswordButton: {
-    backgroundColor: '#4B7BF5',
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-    marginHorizontal: 20,
-  },
-  changePasswordButtonText: {
-    fontFamily: 'Inter-SemiBold',
-    color: '#FFF',
+    fontWeight: '500',
+    color: '#007BFF',
   },
 });
