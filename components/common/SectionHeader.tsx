@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ChevronRight } from 'lucide-react-native';
+import { useAppContext } from '@/context/AppContext';
 
 interface SectionHeaderProps {
   title: string;
@@ -9,13 +10,69 @@ interface SectionHeaderProps {
 }
 
 export default function SectionHeader({ title, actionLabel, onActionPress }: SectionHeaderProps) {
+  const { isSmallDevice, isMediumDevice, isLargeDevice } = useAppContext();
+
+  // Responsive sizing
+  const getTitleFontSize = () => {
+    if (isSmallDevice) return 16;
+    if (isMediumDevice) return 18;
+    return 20; // Large device
+  };
+
+  const getActionFontSize = () => {
+    if (isSmallDevice) return 12;
+    if (isMediumDevice) return 14;
+    return 15; // Large device
+  };
+
+  const getChevronSize = () => {
+    if (isSmallDevice) return 14;
+    if (isMediumDevice) return 16;
+    return 18; // Large device
+  };
+
+  const getMarginBottom = () => {
+    if (isSmallDevice) return 12;
+    if (isMediumDevice) return 16;
+    return 20; // Large device
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+    <View style={[
+      styles.container,
+      { marginBottom: getMarginBottom() }
+    ]}>
+      <Text style={[
+        styles.title,
+        { 
+          fontSize: getTitleFontSize(),
+          flex: 1,
+          marginRight: 8,
+        }
+      ]} 
+      numberOfLines={1}
+      >
+        {title}
+      </Text>
       {actionLabel && (
-        <TouchableOpacity style={styles.actionButton} onPress={onActionPress}>
-          <Text style={styles.actionLabel}>{actionLabel}</Text>
-          <ChevronRight size={16} color="#4B7BF5" />
+        <TouchableOpacity 
+          style={styles.actionButton} 
+          onPress={onActionPress}
+          activeOpacity={0.7}
+        >
+          <Text style={[
+            styles.actionLabel,
+            { fontSize: getActionFontSize() }
+          ]}>
+            {actionLabel}
+          </Text>
+          {onActionPress && (
+            <ChevronRight 
+              size={getChevronSize()} 
+              color="#4B7BF5" 
+              style={styles.chevron}
+            />
+          )}
         </TouchableOpacity>
       )}
     </View>
@@ -27,21 +84,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
   },
   title: {
     fontFamily: 'Inter-SemiBold',
-    fontSize: 18,
     color: '#333',
+    lineHeight: 24,
   },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    minHeight: 32, // Accessibility minimum touch target
   },
   actionLabel: {
     fontFamily: 'Inter-Medium',
-    fontSize: 14,
     color: '#4B7BF5',
-    marginRight: 2,
+  },
+  chevron: {
+    marginLeft: 2,
   },
 });
