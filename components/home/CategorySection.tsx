@@ -131,9 +131,9 @@ export default function CategorySection() {
   };
 
   const getIconSize = () => {
-    if (isSmallDevice) return 50;
-    if (isMediumDevice) return 55;
-    return 70;
+    if (isSmallDevice) return 80;
+    if (isMediumDevice) return 90;
+    return 100;
   };
 
   const getPadding = () => {
@@ -162,7 +162,7 @@ export default function CategorySection() {
               {
                 width: iconSize,
                 height: iconSize,
-                borderRadius: iconSize / 2,
+                borderRadius: 16, // Larger border radius for bigger boxes
                 backgroundColor: category.color,
                 borderWidth: 2,
                 borderColor: category.borderColor,
@@ -175,7 +175,7 @@ export default function CategorySection() {
                   {
                     width: iconSize - 8,
                     height: iconSize - 8,
-                    borderRadius: (iconSize - 8) / 2,
+                    borderRadius: 12, // Larger border radius for the inner image
                   }
                 ]}
                 resizeMode="cover"
@@ -184,8 +184,8 @@ export default function CategorySection() {
             <Text style={[
               styles.categoryName,
               { 
-                fontSize: isSmallDevice ? 10 : isLargeDevice ? 14 : 12,
-                marginTop: isSmallDevice ? 6 : 8,
+                fontSize: isSmallDevice ? 12 : isLargeDevice ? 16 : 14,
+                marginTop: isSmallDevice ? 8 : 10,
               }
             ]}>
               {category.name}
@@ -207,7 +207,7 @@ export default function CategorySection() {
               {
                 width: iconSize,
                 height: iconSize,
-                borderRadius: iconSize / 2,
+                borderRadius: 16, // Larger border radius for bigger boxes
                 backgroundColor: category.color,
                 borderWidth: 2,
                 borderColor: category.borderColor,
@@ -220,7 +220,7 @@ export default function CategorySection() {
                   {
                     width: iconSize - 8,
                     height: iconSize - 8,
-                    borderRadius: (iconSize - 8) / 2,
+                    borderRadius: 12, // Larger border radius for the inner image
                   }
                 ]}
                 resizeMode="cover"
@@ -229,8 +229,8 @@ export default function CategorySection() {
             <Text style={[
               styles.categoryName,
               { 
-                fontSize: isSmallDevice ? 10 : isLargeDevice ? 14 : 12,
-                marginTop: isSmallDevice ? 6 : 8,
+                fontSize: isSmallDevice ? 12 : isLargeDevice ? 16 : 14,
+                marginTop: isSmallDevice ? 8 : 10,
               }
             ]}>
               {category.name}
