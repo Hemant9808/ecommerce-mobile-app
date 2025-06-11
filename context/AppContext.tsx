@@ -83,8 +83,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Add item to cart
   const addToCart = (product: Product, quantity: number = 1) => {
+    console.log('addToCart called with:', product);
     const existingItem = cartItems.find(item => item.id === product.id);
-    
+
     if (existingItem) {
       updateCartItemQuantity(product.id, existingItem.quantity + quantity);
       Alert.alert('Success', `Updated ${product.name} quantity in cart (${existingItem.quantity + quantity} total)`);
@@ -96,7 +97,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         image: product.image,
         quantity: quantity
       };
-      
+
       setCartItems([...cartItems, newItem]);
       Alert.alert('Added to Cart!', `${product.name} has been added to your cart.`, [
         { text: 'Continue Shopping', style: 'cancel' },
@@ -152,7 +153,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Get product by ID
   const getProductById = (id: string) => {
-    return products.find(product => product.id === id);
+    // Search all product arrays for the given ID
+    const allProducts = [
+      ...products,
+      ...require('@/data/products').flashSaleProducts,
+      ...require('@/data/products').wishlistProducts
+    ];
+    return allProducts.find(product => product.id === id);
   };
 
   // Update search results when query changes

@@ -8,21 +8,18 @@ import { useAppContext } from '@/context/AppContext';
 import { router } from 'expo-router';
 
 export default function FlashSellSection() {
-  const [favorites, setFavorites] = useState<string[]>([]);
   const [timeLeft, setTimeLeft] = useState({
     hours: 14,
     minutes: 25,
     seconds: 37
   });
-    const { isSmallDevice, isMediumDevice, isLargeDevice, addToCart, addToWishlist, isInWishlist } = useAppContext();
+    const { isSmallDevice, isMediumDevice, isLargeDevice, addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useAppContext();
 
   const toggleFavorite = (product: any) => {
     if (isInWishlist(product.id)) {
-      // Remove from wishlist logic would go here
-      setFavorites(favorites.filter(id => id !== product.id));
+      removeFromWishlist(product.id);
     } else {
       addToWishlist(product);
-      setFavorites([...favorites, product.id]);
     }
   };
 
@@ -31,6 +28,7 @@ export default function FlashSellSection() {
   };
 
   const handleAddToCart = (product: any) => {
+    console.log('handleAddToCart called with:', product);
     addToCart(product);
   };
 
@@ -185,8 +183,8 @@ export default function FlashSellSection() {
               >
                 <Heart
                   size={isSmallDevice ? 14 : 16}
-                  color={favorites.includes(product.id) ? '#FF3040' : '#666'}
-                  fill={favorites.includes(product.id) ? '#FF3040' : 'transparent'}
+                  color={isInWishlist(product.id) ? '#FF3040' : '#666'}
+                  fill={isInWishlist(product.id) ? '#FF3040' : 'transparent'}
                 />
               </TouchableOpacity>
             </View>
