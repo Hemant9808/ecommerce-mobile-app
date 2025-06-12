@@ -4,6 +4,12 @@ A comprehensive, feature-rich mobile e-commerce application built with **React N
 
 ## 📱 Screenshots & Features
 
+### Preview
+
+<img src="./assets/images/E-commerce ReactNative.png" alt="Fintech Mobile App Preview" width="600" />
+
+This is a demo preview of the application interface.
+
 ### 🏠 Home Screen
 - **Interactive Banner Carousel**: Auto-scrolling promotional banners with category-specific navigation
 - **Category Grid**: 16+ product categories with smart filtering
