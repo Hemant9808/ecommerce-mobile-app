@@ -391,11 +391,11 @@ A clean, modern, and fully responsive **eCommerce mobile application** built wit
 
 | Home | Products | Cart |
 |------|----------|------|
-| ![Home](./assets/home.png) | ![Products](./assets/products.png) | ![Cart](./assets/cart.png) |
+| ![Home](./assets/images/home.png) | ![Products](./assets/images/products.png) | ![Cart](./assets/images/cart.png) |
 
 | Wishlist | Profile |
 |----------|---------|
-| ![Wishlist](./assets/wishlist.png) | ![Profile](./assets/profile.png) |
+| ![Wishlist](./assets/images/wishlist.png) | ![Profile](./assets/images/profile.png) |
 
 > 💡 All screenshots are mobile-friendly and optimized for 375px–414px width screens.
 
