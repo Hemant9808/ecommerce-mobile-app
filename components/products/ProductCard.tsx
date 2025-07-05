@@ -120,7 +120,7 @@ export default function ProductCard({
               styles.listPrice,
               { fontSize: isSmallDevice ? 16 : isLargeDevice ? 20 : 18 }
             ]}>
-              ${product.price.toFixed(2)}
+              ₹{product.price.toFixed(2)}
             </Text>
             <Text style={[
               styles.listSoldText,
@@ -206,7 +206,7 @@ export default function ProductCard({
               styles.gridPrice,
               { fontSize: isSmallDevice ? 14 : isLargeDevice ? 18 : 16 }
             ]}>
-              ${product.price.toFixed(2)}
+              ₹{product.price.toFixed(2)}
             </Text>
             <Text style={[
               styles.gridSoldText,

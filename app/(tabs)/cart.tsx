@@ -105,7 +105,7 @@ export default function CartScreen() {
                 styles.totalAmount,
                 { fontSize: isSmallDevice ? 13 : 14 }
               ]}>
-                ${cartTotal.toFixed(2)}
+                ₹{cartTotal.toFixed(2)}
               </Text>
             </View>
             
@@ -120,7 +120,7 @@ export default function CartScreen() {
                 styles.totalAmount,
                 { fontSize: isSmallDevice ? 13 : 14 }
               ]}>
-                {shippingCost === 0 ? 'Free' : `$${shippingCost.toFixed(2)}`}
+                {shippingCost === 0 ? 'Free' : `₹${shippingCost.toFixed(2)}`}
               </Text>
             </View>
             
@@ -129,7 +129,7 @@ export default function CartScreen() {
                 styles.freeShippingText,
                 { fontSize: isSmallDevice ? 11 : 12 }
               ]}>
-                Add ${(50 - cartTotal).toFixed(2)} more for free shipping
+                Add ₹{(50 - cartTotal).toFixed(2)} more for free shipping
               </Text>
             )}
             
@@ -144,7 +144,7 @@ export default function CartScreen() {
                 styles.grandTotalAmount,
                 { fontSize: isSmallDevice ? 17 : isMediumDevice ? 18 : 20 }
               ]}>
-                ${totalAmount.toFixed(2)}
+                ₹{totalAmount.toFixed(2)}
               </Text>
             </View>
             

@@ -181,13 +181,13 @@ export default function ProfileScreen() {
                 styles.profileName,
                 { fontSize: isSmallDevice ? 16 : isMediumDevice ? 18 : 20 }
               ]}>
-                John Doe
+                Hemant Kumar
               </Text>
               <Text style={[
                 styles.profileEmail,
                 { fontSize: isSmallDevice ? 12 : isMediumDevice ? 13 : 14 }
               ]}>
-                johndoe@example.com
+                hemant27134@gmail.com
               </Text>
               <View style={styles.membershipBadge}>
                 <Text style={[

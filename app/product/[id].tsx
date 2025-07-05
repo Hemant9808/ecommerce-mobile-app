@@ -69,7 +69,7 @@ export default function ProductDetailScreen() {
     addToCart(product, quantity);
     Alert.alert(
       'Added to Cart!',
-      `${quantity} x ${product.name} added to cart\nTotal: $${(product.price * quantity).toFixed(2)}`,
+      `${quantity} x ${product.name} added to cart\nTotal: ₹${(product.price * quantity).toFixed(2)}`,
       [
         { text: 'Continue Shopping', style: 'cancel' },
         { text: 'View Cart', onPress: () => router.push('/(tabs)/cart') }
@@ -181,7 +181,7 @@ export default function ProductDetailScreen() {
               <Text style={[
                 styles.price,
                 isSmallDevice && styles.priceSmall
-              ]}>${product.price.toFixed(2)}</Text>
+              ]}>₹{product.price.toFixed(2)}</Text>
               <Text style={[
                 styles.soldText,
                 isSmallDevice && styles.soldTextSmall
@@ -251,7 +251,7 @@ export default function ProductDetailScreen() {
               styles.totalPrice,
               isSmallDevice && styles.totalPriceSmall
             ]}>
-              ${(product.price * quantity).toFixed(2)}
+              ₹{(product.price * quantity).toFixed(2)}
             </Text>
           </View>
           

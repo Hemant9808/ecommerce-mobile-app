@@ -125,11 +125,11 @@ export default function OrdersScreen() {
   };
 
   const handleOrderDetails = (order: Order) => {
-    const itemsList = order.items.map(item => `• ${item.name} (x${item.quantity}) - $${item.price}`).join('\n');
+    const itemsList = order.items.map(item => `• ${item.name} (x${item.quantity}) - ₹${item.price}`).join('\n');
     
     Alert.alert(
       `Order Details - ${order.id}`,
-      `Order Date: ${order.date}\nStatus: ${order.status.toUpperCase()}\nTotal: $${order.total.toFixed(2)}\n\nItems:\n${itemsList}${order.tracking ? `\n\nTracking: ${order.tracking}` : ''}${order.deliveryDate ? `\nDelivered: ${order.deliveryDate}` : ''}`,
+      `Order Date: ${order.date}\nStatus: ${order.status.toUpperCase()}\nTotal: ₹${order.total.toFixed(2)}\n\nItems:\n${itemsList}${order.tracking ? `\n\nTracking: ${order.tracking}` : ''}${order.deliveryDate ? `\nDelivered: ${order.deliveryDate}` : ''}`,
       [
         { text: 'Track Order', onPress: () => handleTrackOrder(order) },
         { text: 'Reorder', onPress: () => handleReorder(order) },
@@ -204,7 +204,7 @@ export default function OrdersScreen() {
 
             <View style={styles.orderFooter}>
               <Text style={[styles.orderTotal, { fontSize: isSmallDevice ? 14 : 16 }]}>
-                Total: ${order.total.toFixed(2)}
+                Total: ₹{order.total.toFixed(2)}
               </Text>
               <View style={styles.actionButtons}>
                 {order.status !== 'cancelled' && (

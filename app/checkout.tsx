@@ -27,7 +27,7 @@ export default function CheckoutScreen() {
     // Simulate order processing
     Alert.alert(
       'Order Placed Successfully!',
-      `Thank you for your order!\n\nOrder Details:\n• ${cartItems.length} item${cartItems.length !== 1 ? 's' : ''}\n• Total: $${totalAmount.toFixed(2)}\n• Payment: ${paymentMethod.replace('_', ' ').toUpperCase()}\n• Delivery: ${deliveryMethod.replace('_', ' ')} delivery\n\nYour order will be processed and shipped to:\n${address.fullName}\n${address.street}\n${address.city}, ${address.state} ${address.zipCode}`,
+      `Thank you for your order!\n\nOrder Details:\n• ${cartItems.length} item${cartItems.length !== 1 ? 's' : ''}\n• Total: ₹${totalAmount.toFixed(2)}\n• Payment: ${paymentMethod.replace('_', ' ').toUpperCase()}\n• Delivery: ${deliveryMethod.replace('_', ' ')} delivery\n\nYour order will be processed and shipped to:\n${address.fullName}\n${address.street}\n${address.city}, ${address.state} ${address.zipCode}`,
       [
         {
           text: 'Continue Shopping',
@@ -314,7 +314,7 @@ export default function CheckoutScreen() {
                 <Text style={[
                   styles.optionPrice,
                   isSmallDevice && styles.optionPriceSmall
-                ]}>$5.00</Text>
+                ]}>₹5.00</Text>
                 {deliveryMethod === 'standard' && (
                   <View style={[
                     styles.checkmark,
@@ -346,7 +346,7 @@ export default function CheckoutScreen() {
                 <Text style={[
                   styles.optionPrice,
                   isSmallDevice && styles.optionPriceSmall
-                ]}>$15.00</Text>
+                ]}>₹15.00</Text>
                 {deliveryMethod === 'express' && (
                   <View style={[
                     styles.checkmark,
@@ -378,7 +378,7 @@ export default function CheckoutScreen() {
                 <Text style={[
                   styles.optionPrice,
                   isSmallDevice && styles.optionPriceSmall
-                ]}>$25.00</Text>
+                ]}>₹25.00</Text>
                 {deliveryMethod === 'same_day' && (
                   <View style={[
                     styles.checkmark,
@@ -409,7 +409,7 @@ export default function CheckoutScreen() {
               <Text style={[
                 styles.summaryValue,
                 isSmallDevice && styles.summaryValueSmall
-              ]}>${cartTotal.toFixed(2)}</Text>
+              ]}>₹{cartTotal.toFixed(2)}</Text>
             </View>
             
             <View style={styles.summaryRow}>
@@ -420,7 +420,7 @@ export default function CheckoutScreen() {
               <Text style={[
                 styles.summaryValue,
                 isSmallDevice && styles.summaryValueSmall
-              ]}>${deliveryFee.toFixed(2)}</Text>
+              ]}>₹{deliveryFee.toFixed(2)}</Text>
             </View>
             
             <View style={[styles.summaryRow, styles.totalRow]}>
@@ -431,7 +431,7 @@ export default function CheckoutScreen() {
               <Text style={[
                 styles.totalValue,
                 isSmallDevice && styles.totalValueSmall
-              ]}>${totalAmount.toFixed(2)}</Text>
+              ]}>₹{totalAmount.toFixed(2)}</Text>
             </View>
           </View>
         </ScrollView>

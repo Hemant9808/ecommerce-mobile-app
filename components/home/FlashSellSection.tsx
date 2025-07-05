@@ -175,13 +175,13 @@ export default function FlashSellSection() {
                   styles.productPrice,
                   { fontSize: isSmallDevice ? 14 : isLargeDevice ? 18 : 16 }
                 ]}>
-                  ${product.price}
+                  ₹{product.price}
                 </Text>
                 <Text style={[
                   styles.originalPrice,
                   { fontSize: isSmallDevice ? 10 : 12 }
                 ]}>
-                  ${(product.price * 1.3).toFixed(2)}
+                  ₹{(product.price * 1.3).toFixed(2)}
                 </Text>
               </View>
               <View style={styles.bottomRow}>

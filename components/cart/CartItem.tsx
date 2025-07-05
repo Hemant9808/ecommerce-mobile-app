@@ -97,14 +97,14 @@ export default function CartItem({ item }: CartItemProps) {
               styles.price,
               { fontSize: isSmallDevice ? 14 : isMediumDevice ? 15 : 16 }
             ]}>
-              ${item.price.toFixed(2)}
+              ₹{item.price.toFixed(2)}
             </Text>
             {item.quantity > 1 && (
               <Text style={[
                 styles.quantityPrice,
                 { fontSize: isSmallDevice ? 11 : 12 }
               ]}>
-                × {item.quantity} = ${totalPrice}
+                × {item.quantity} = ₹{totalPrice}
               </Text>
             )}
           </View>

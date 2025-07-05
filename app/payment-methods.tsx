@@ -116,7 +116,7 @@ export default function PaymentMethodsScreen() {
   const addPayPal = () => {
     Alert.alert(
       'Add PayPal',
-      'Demo: Link your PayPal account\n\n• Email: john.doe@email.com\n• Account Status: Verified\n• Balance: $1,234.56',
+      'Demo: Link your PayPal account\n\n• Email: john.doe@email.com\n• Account Status: Verified\n• Balance: ₹1,234.56',
       [
         { 
           text: 'Link Account', 

@@ -26,7 +26,7 @@ This is a demo preview of the application interface.
 
 ### 🛍️ Cart & Checkout
 - **Dynamic Cart**: Add, remove, update quantities with real-time totals
-- **Smart Shipping**: Free shipping over $50, calculated shipping costs
+- **Smart Shipping**: Free shipping over ₹50, calculated shipping costs
 - **Complete Checkout Flow**: Address, payment method, delivery options
 - **Order Confirmation**: Detailed order summary with tracking information
 
