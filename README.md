@@ -1,4 +1,4 @@
-# 🛍️ Mobile E-Commerce App
+<!-- # 🛍️ Mobile E-Commerce App
 
 A comprehensive, feature-rich mobile e-commerce application built with **React Native**, **Expo**, and **TypeScript**. This app demonstrates modern mobile app development patterns with a complete shopping experience, responsive design, and intuitive user interface.
 
@@ -363,4 +363,69 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ using React Native, Expo, and TypeScript**
 
-For questions, issues, or feature requests, please open an issue on the repository.
+For questions, issues, or feature requests, please open an issue on the repository. -->
+
+
+
+
+# 🛍️ Bolt eCommerce App
+
+A clean, modern, and fully responsive **eCommerce mobile application** built with **React Native + Expo + Expo Router**. It includes features like product listings, category filtering, wishlist management, cart functionality, and a full checkout process — optimized for both Android and iOS.
+
+---
+
+## 📱 Features
+
+- 🔎 Product Search with Categories
+- 🛒 Add to Cart / Cart Management
+- ❤️ Wishlist Functionality
+- 🧾 Checkout & Total Summary
+- 👤 User Profile with Order History
+- 🔄 Smooth navigation using **React Navigation**
+- 🎨 Beautiful UI using **custom components** and **Google Fonts**
+- 📦 Cross-platform support via **Expo**
+
+---
+
+## 🚀 Screenshots
+
+| Home | Products | Cart |
+|------|----------|------|
+| ![Home](./screenshots/home.png) | ![Products](./screenshots/products.png) | ![Cart](./screenshots/cart.png) |
+
+| Wishlist | Profile |
+|----------|---------|
+| ![Wishlist](./screenshots/wishlist.png) | ![Profile](./screenshots/profile.png) |
+
+> 💡 All screenshots are mobile-friendly and optimized for 375px–414px width screens.
+
+---
+
+## 🧰 Tech Stack
+
+| Technology | Use |
+|------------|-----|
+| [Expo](https://expo.dev) | App scaffolding, bundling, and OTA updates |
+| React Native | Core mobile framework |
+| [Expo Router](https://expo.github.io/router/) | File-based routing |
+| [React Navigation](https://reactnavigation.org/) | Navigation handling |
+| [Lucide Icons](https://lucide.dev) | Icon pack |
+| [Google Fonts: Inter](https://fonts.google.com/specimen/Inter) | Modern font style |
+| TypeScript | Type safety |
+| Reanimated + Gesture Handler | Animations and interactions |
+| React Native WebView | For in-app web-based screens if needed |
+
+---
+
+## 📦 Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-username/bolt-expo-starter.git
+cd bolt-expo-starter
+
+# 2. Install dependencies
+npm install
+
+# 3. Start development server
+npm run dev
